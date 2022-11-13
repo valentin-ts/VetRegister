@@ -22,7 +22,5 @@ namespace VetRegister
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-
-        //test commit
     }
 }
