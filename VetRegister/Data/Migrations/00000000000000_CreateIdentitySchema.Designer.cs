@@ -9,7 +9,7 @@ using VetRegister.Data;
 
 namespace VetRegister.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(VetRegisterDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
