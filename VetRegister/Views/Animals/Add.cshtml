@@ -1,0 +1,38 @@
+﻿
+@model AddAnimalFormModel 
+
+@{ 
+    ViewData["Title"] = "Add Animal";
+}
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" placeholder="Give me a name">
+        <span asp-validation-for="Name" class="small text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Owner"></label>
+        <input asp-for="Owner" class="form-control" placeholder="Give me an owner">
+        <span asp-validation-for="Owner" class="small text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Age"></label>
+        <input asp-for="Age" class="form-control" placeholder="Tell my age">
+        <span asp-validation-for="Age" class="small text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="BreedId">Example select</label>
+        <select asp-for="BreedId" class="form-control">
+            @foreach (var breed in Model.Breeds)
+            {
+                <option value="@breed.Id">@breed.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="exampleFormControlTextarea1">Example textarea</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+    <input class="btn btn-primary float-right" type="submit" value="Save" />
+</form>
