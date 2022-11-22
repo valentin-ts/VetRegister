@@ -16,10 +16,10 @@ namespace VetRegister.Controllers
         {
             this.data = data;
         }
-
+        
         public IActionResult Add()
         {
-            return View(new AddAnimalFormModel
+            return View(new AddAndEditAnimalFormModel
                 {
                     Breeds = this.GetAnimalBreeds()
                 }
@@ -27,7 +27,7 @@ namespace VetRegister.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(AddAnimalFormModel animal)
+        public IActionResult Add(AddAndEditAnimalFormModel animal)
         {
             //check if BreedId exists in database
             if (!this.data.Breeds.Any(b => b.Id == animal.BreedId))
@@ -55,6 +55,80 @@ namespace VetRegister.Controllers
 
             return RedirectToAction("All");
         }
+
+        public IActionResult Edit(int id)
+        {
+            var currentAnimal = this.data.Animals.Find(id);
+
+            if (currentAnimal == null)
+            {
+                return BadRequest();
+            }
+
+            return View(new AddAndEditAnimalFormModel
+            {
+                Name = currentAnimal.Name,
+                Age = currentAnimal.Age,
+                BreedId = currentAnimal.BreedId,
+                Owner = currentAnimal.Owner,
+                Breeds = this.GetAnimalBreeds()
+            });
+
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, AddAndEditAnimalFormModel modelAnimal)
+        {
+            var currentAnimal = this.data.Animals.Find(id);
+
+            currentAnimal.Owner = modelAnimal.Owner;
+            currentAnimal.Name = modelAnimal.Name;
+            currentAnimal.Age = modelAnimal.Age;
+            currentAnimal.BreedId = modelAnimal.BreedId;
+
+            this.data.SaveChanges();
+
+            return RedirectToAction("All");
+        }
+
+
+        public IActionResult Details(int id)
+        {
+            var currentAnimal = this.data.Animals.Find(id);
+
+            if (currentAnimal == null)
+            {
+                return BadRequest();
+            }
+
+            return View(new AddAndEditAnimalFormModel
+            {
+                Name = currentAnimal.Name,
+                Age = currentAnimal.Age,
+                BreedId = currentAnimal.BreedId,
+                Owner = currentAnimal.Owner,
+                Breeds = this.GetAnimalBreeds()
+            });
+
+        }
+
+
+        public IActionResult Delete(int id)
+        {
+            var currentAnimal = this.data.Animals.Find(id);
+
+            if (currentAnimal == null)
+            {
+                return BadRequest();
+            }
+
+            this.data.Animals.Remove(currentAnimal);
+            this.data.SaveChanges();
+
+            return RedirectToAction("All");
+
+        }
+
 
         public IActionResult All(string nameFilter, string breedFilter, string ageFilter, string ownerFilter)
         {

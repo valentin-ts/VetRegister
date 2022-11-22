@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VetRegister.Models.Animals
 {
-    public class AddAnimalFormModel
+    public class AddAndEditAnimalFormModel
     {
         [Required]
         [StringLength(20, MinimumLength =2)]

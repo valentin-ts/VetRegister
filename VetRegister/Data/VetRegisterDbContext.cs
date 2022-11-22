@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace VetRegister.Data
 
         public DbSet<Breed> Breeds { get; init; }
 
+        public DbSet<Doctor> Doctors{ get; init; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Animal>()
@@ -25,6 +28,12 @@ namespace VetRegister.Data
                 .WithMany(a => a.Animals)
                 .HasForeignKey(b => b.BreedId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Doctor>()
+                .HasOne<IdentityUser>()
+                .WithOne()
+                .HasForeignKey<Doctor>(d => d.UserId)
+                .OnDelete(DeleteBehavior.Restrict); 
 
             base.OnModelCreating(builder);
         }

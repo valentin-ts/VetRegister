@@ -1,0 +1,16 @@
+﻿//using Microsoft.AspNetCore.Identity;
+
+namespace VetRegister.Data.Models
+{
+    public class Doctor
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string UserId { get; set; }
+
+        //public IdentityUser User { get; set; }
+
+    }
+}

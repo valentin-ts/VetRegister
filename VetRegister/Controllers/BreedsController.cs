@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using VetRegister.Data;
 using VetRegister.Data.Models;
 using VetRegister.Models.Breeds;
@@ -10,14 +12,21 @@ namespace VetRegister.Controllers
     public class BreedsController : Controller
     {
         private readonly VetRegisterDbContext data;
-
+        
         public BreedsController(VetRegisterDbContext data)
         {
             this.data = data;
         }
 
+        [Authorize]
         public IActionResult ViewAll()
         {
+            //if user is a doctor
+
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var userIsDoctor = this.data.Doctors.Any(d => d.UserId == userId);
+
             return View(new AllBreedsViewModel
                 {
                     AllBreedsList = this.GetAnimalBreeds()
