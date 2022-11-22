@@ -16,11 +16,9 @@ namespace VetRegister.Data
         }
 
         public DbSet<Animal> Animals { get; init; }
-
         public DbSet<Breed> Breeds { get; init; }
-
         public DbSet<Doctor> Doctors{ get; init; }
-
+        public DbSet<Exam> Exams { get; init; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Animal>()
@@ -33,7 +31,13 @@ namespace VetRegister.Data
                 .HasOne<IdentityUser>()
                 .WithOne()
                 .HasForeignKey<Doctor>(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Exam>()
+                .HasOne(a => a.Animal)
+                .WithMany(e => e.Exams)
+                .HasForeignKey(a => a.AnimalId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
         }

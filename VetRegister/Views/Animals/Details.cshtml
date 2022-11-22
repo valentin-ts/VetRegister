@@ -4,7 +4,6 @@
     ViewData["Title"] = "Details for Animal";
 }
 
-
 <form>
     <div class="form-group row">
         <label for="Name" class="col-sm-2 col-form-label">Name:</label>
@@ -23,7 +22,19 @@
         <a for="Breed" class="col-sm-10 col-form-label">@Model.BreedName</a>
     </div>
 
-        <a class="btn btn-primary" asp-controller="Animals" asp-action="Edit" asp-route-id="@Model.AnimalId">Edit</a>
-        <a class="btn btn-primary" asp-controller="Animals" asp-action="Delete" asp-route-id="@Model.AnimalId">Delete</a>
+    <a class="btn btn-primary" asp-controller="Animals" asp-action="Edit" asp-route-id="@Model.AnimalId">Edit</a>
+    <a class="btn btn-primary" asp-controller="Animals" asp-action="Delete" asp-route-id="@Model.AnimalId">Delete</a>
+    <a class="btn btn-primary" asp-controller="Exams" asp-action="Add" asp-route-id="@Model.AnimalId">Add Exam</a>
 
+<div>
+    @foreach (var exam in Model.Exams)
+    {
+        <div class="input-group  m-1">
+            <div class="input-group-prepend">
+                <span class="input-group-text">@exam.CreatedOn.ToLocalTime()</span>
+            </div>
+            <textarea class="form-control" aria-label="With textarea">@exam.Text</textarea>
+        </div>
+    }
+</div>
 </form>

@@ -5,7 +5,7 @@ using System.Linq;
 using VetRegister.Data;
 using VetRegister.Data.Models;
 using VetRegister.Models.Animals;
-
+using VetRegister.Models.Exams;
 
 namespace VetRegister.Controllers
 {
@@ -97,8 +97,8 @@ namespace VetRegister.Controllers
 
         public IActionResult Details(int id)
         {
-            var currentAnimal = this.data.Animals.Find(id);
-            //var currentAnimal = this.data.Animals.Include(a => a.Breed).FirstOrDefault(a => a.Id == id);
+            //var currentAnimal = this.data.Animals.Find(id);
+            var currentAnimal = this.data.Animals.Include(a => a.Breed).Include(e => e.Exams).FirstOrDefault(a => a.Id == id);
 
 
 
@@ -115,9 +115,9 @@ namespace VetRegister.Controllers
                 Owner = currentAnimal.Owner,
                 Breeds = this.GetAnimalBreeds(),
                 BreedName = GetBreedName(currentAnimal.BreedId),
-                AnimalId = currentAnimal.Id  
+                AnimalId = currentAnimal.Id,
+                Exams = GetAnimalExams(currentAnimal.Id),
             });
-
         }
 
 
@@ -202,6 +202,19 @@ namespace VetRegister.Controllers
                 {
                     Id = a.Id,
                     Name = a.Name 
+                })
+                .ToList();
+        }
+
+        private IEnumerable<ExamFormModel> GetAnimalExams(int animalId)
+        {
+            return this.data
+                .Exams
+                .Where(e => e.AnimalId == animalId)
+                .Select(e => new ExamFormModel
+                {
+                    Text = e.Text,
+                    CreatedOn = e.CreatedOn
                 })
                 .ToList();
         }

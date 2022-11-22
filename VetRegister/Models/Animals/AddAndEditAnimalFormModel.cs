@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using VetRegister.Models.Exams;
 
 namespace VetRegister.Models.Animals
 {
@@ -28,5 +29,7 @@ namespace VetRegister.Models.Animals
         public IEnumerable<AnimalBreedViewModel> Breeds { get; set; }
 
         public int AnimalId { get; set; }
+
+        public IEnumerable<ExamFormModel> Exams { get; set; }
     }
 }

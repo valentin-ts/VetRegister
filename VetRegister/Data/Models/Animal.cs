@@ -27,5 +27,7 @@ namespace VetRegister.Data.Models
         public int BreedId { get; set; }
 
         public Breed Breed { get; set; }
+
+        public IEnumerable<Exam> Exams { get; set; } = new List<Exam>();
     }
 }
