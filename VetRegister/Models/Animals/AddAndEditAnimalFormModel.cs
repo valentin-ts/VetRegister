@@ -26,5 +26,7 @@ namespace VetRegister.Models.Animals
 
         //[Required]
         public IEnumerable<AnimalBreedViewModel> Breeds { get; set; }
+
+        public int AnimalId { get; set; }
     }
 }

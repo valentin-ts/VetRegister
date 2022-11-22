@@ -114,7 +114,8 @@ namespace VetRegister.Controllers
                 BreedId = currentAnimal.BreedId,
                 Owner = currentAnimal.Owner,
                 Breeds = this.GetAnimalBreeds(),
-                BreedName = GetBreedName(currentAnimal.BreedId)
+                BreedName = GetBreedName(currentAnimal.BreedId),
+                AnimalId = currentAnimal.Id  
             });
 
         }

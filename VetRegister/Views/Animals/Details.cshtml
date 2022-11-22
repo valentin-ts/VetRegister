@@ -22,4 +22,8 @@
         <label for="Breed" class="col-sm-2 col-form-label">Breed:</label>
         <a for="Breed" class="col-sm-10 col-form-label">@Model.BreedName</a>
     </div>
+
+        <a class="btn btn-primary" asp-controller="Animals" asp-action="Edit" asp-route-id="@Model.AnimalId">Edit</a>
+        <a class="btn btn-primary" asp-controller="Animals" asp-action="Delete" asp-route-id="@Model.AnimalId">Delete</a>
+
 </form>
