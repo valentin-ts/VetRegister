@@ -4,31 +4,22 @@
     ViewData["Title"] = "Details for Animal";
 }
 
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" placeholder="Give me a name">
+
+<form>
+    <div class="form-group row">
+        <label for="Name" class="col-sm-2 col-form-label">Name:</label>
+        <a for="Name" class="col-sm-10 col-form-label">@Model.Name</a>
     </div>
-    <div class="form-group">
-        <label asp-for="Owner"></label>
-        <input asp-for="Owner" class="form-control" placeholder="Give me an owner">
+    <div class="form-group row">
+        <label for="Age" class="col-sm-2 col-form-label">Age:</label>
+        <a for="Age" class="col-sm-10 col-form-label">@Model.Age</a>
     </div>
-    <div class="form-group">
-        <label asp-for="Age"></label>
-        <input asp-for="Age" class="form-control" placeholder="Tell my age">
+    <div class="form-group row">
+        <label for="Owner" class="col-sm-2 col-form-label">Owner:</label>
+        <a for="Owner" class="col-sm-10 col-form-label">@Model.Owner</a>
     </div>
-    <div class="form-group">
-        <label asp-for="BreedId">Example select</label>
-        <select asp-for="BreedId" class="form-control">
-            @foreach (var breed in Model.Breeds)
-            {
-                <option value="@breed.Id">@breed.Name</option>
-            }
-        </select>
+    <div class="form-group row">
+        <label for="Breed" class="col-sm-2 col-form-label">Breed:</label>
+        <a for="Breed" class="col-sm-10 col-form-label">@Model.BreedName</a>
     </div>
-    <div class="form-group">
-        <label for="exampleFormControlTextarea1">Example textarea</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-    </div>
-    <input class="btn btn-primary float-right" type="submit" value="Save" />
 </form>

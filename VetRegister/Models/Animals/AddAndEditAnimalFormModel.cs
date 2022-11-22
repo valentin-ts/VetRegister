@@ -16,11 +16,13 @@ namespace VetRegister.Models.Animals
         [StringLength(20, MinimumLength = 2)]
         public string Owner { get; init; }
 
+        [Required]
         public int Age { get; init; }
 
+        [Required]
         public int BreedId { get; set; }
 
-        //public Breed Breed { get; set; }
+        public string BreedName { get; set; }
 
         //[Required]
         public IEnumerable<AnimalBreedViewModel> Breeds { get; set; }

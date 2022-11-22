@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using VetRegister.Data;
@@ -32,7 +33,7 @@ namespace VetRegister.Controllers
             //check if BreedId exists in database
             if (!this.data.Breeds.Any(b => b.Id == animal.BreedId))
             {
-                this.ModelState.AddModelError(nameof(animal.BreedId), "Breed does not exist.");
+                return BadRequest();
             }
 
             //check if model statie is invalid, add breeds again.
@@ -58,7 +59,8 @@ namespace VetRegister.Controllers
 
         public IActionResult Edit(int id)
         {
-            var currentAnimal = this.data.Animals.Find(id);
+            //var currentAnimal = this.data.Animals.Find(id);
+            var currentAnimal = this.data.Animals.Include(a => a.Breed).FirstOrDefault(a => a.Id == id);
 
             if (currentAnimal == null)
             {
@@ -71,7 +73,8 @@ namespace VetRegister.Controllers
                 Age = currentAnimal.Age,
                 BreedId = currentAnimal.BreedId,
                 Owner = currentAnimal.Owner,
-                Breeds = this.GetAnimalBreeds()
+                Breeds = this.GetAnimalBreeds(),
+                BreedName = currentAnimal.Breed.Name
             });
 
         }
@@ -95,6 +98,9 @@ namespace VetRegister.Controllers
         public IActionResult Details(int id)
         {
             var currentAnimal = this.data.Animals.Find(id);
+            //var currentAnimal = this.data.Animals.Include(a => a.Breed).FirstOrDefault(a => a.Id == id);
+
+
 
             if (currentAnimal == null)
             {
@@ -107,7 +113,8 @@ namespace VetRegister.Controllers
                 Age = currentAnimal.Age,
                 BreedId = currentAnimal.BreedId,
                 Owner = currentAnimal.Owner,
-                Breeds = this.GetAnimalBreeds()
+                Breeds = this.GetAnimalBreeds(),
+                BreedName = GetBreedName(currentAnimal.BreedId)
             });
 
         }
@@ -196,6 +203,13 @@ namespace VetRegister.Controllers
                     Name = a.Name 
                 })
                 .ToList();
+        }
+
+        private string GetBreedName(int breedId)
+        {
+            return this.data
+                .Breeds
+                .FirstOrDefault(b => b.Id == breedId).Name;
         }
     }
 }
