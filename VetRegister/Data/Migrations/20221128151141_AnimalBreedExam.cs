@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace VetRegister.Data.Migrations
 {
-    public partial class AnimalBreedProcedureTables : Migration
+    public partial class AnimalBreedExam : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

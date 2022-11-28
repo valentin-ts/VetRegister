@@ -19,15 +19,16 @@ namespace VetRegister.Data.Models
 
         public DateTime DateOfBirth { get; set; }
 
-        //[Required]
-        //[MinLength(2)]
-        //[MaxLength(20)]
-        //public string Owner { get; set; }
+
+        public int PersonId { get; set; }
+
+        public Person Person { get; set; }
+
 
         public int BreedId { get; set; }
 
         public Breed Breed { get; set; }
 
-        public IEnumerable<Procedure> Exams { get; set; } = new List<Procedure>();
+        public IEnumerable<Exam> Exams { get; set; } = new List<Exam>();
     }
 }
