@@ -18,14 +18,12 @@ namespace VetRegister.Controllers
             this.data = data;
         }
 
-        [Authorize]
+        //[Authorize]
         public IActionResult ViewAll()
         {
             //if user is a doctor
-
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            var userIsDoctor = this.data.Doctors.Any(d => d.UserId == userId);
+            //var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            //var userIsDoctor = this.data.Doctors.Any(d => d.UserId == userId);
 
             return View(new AllBreedsViewModel
                 {

@@ -17,13 +17,13 @@ namespace VetRegister.Controllers
         {
             this.data = data;
         }
-        
+
         public IActionResult Add()
         {
             return View(new AddAndEditAnimalFormModel
-                {
-                    Breeds = this.GetAnimalBreeds()
-                }
+            {
+                Breeds = this.GetAnimalBreeds()
+            }
             );
         }
 
@@ -164,7 +164,7 @@ namespace VetRegister.Controllers
                 animalsQuery = animalsQuery.Where(a => a.Owner.Contains(ownerFilter));
             }
 
-            var animals =  animalsQuery
+            var animals = animalsQuery
                 .Select(a => new AnimalListingViewModel
                 {
                     Id = a.Id,
@@ -181,11 +181,11 @@ namespace VetRegister.Controllers
                 .Select(a => a.Breed.Name)
                 .Distinct()
                 .ToList();
- 
+
             //AnimalBreeds.Insert(0, null);
 
-            return View(new AllAnimalsQueryModel 
-            { 
+            return View(new AllAnimalsQueryModel
+            {
                 Animals = animals,
                 //NameFilter = nameFilter,
                 Breeds = AnimalBreeds
@@ -201,7 +201,7 @@ namespace VetRegister.Controllers
                 .Select(a => new AnimalBreedViewModel
                 {
                     Id = a.Id,
-                    Name = a.Name 
+                    Name = a.Name
                 })
                 .ToList();
         }
@@ -225,5 +225,7 @@ namespace VetRegister.Controllers
                 .Breeds
                 .FirstOrDefault(b => b.Id == breedId).Name;
         }
+
     }
+
 }
