@@ -46,8 +46,8 @@ namespace VetRegister.Controllers
             var newAnimal = new Animal
             {
                 Name = animal.Name,
-                Owner = animal.Owner,
-                Age = animal.Age,
+                //Owner = animal.Owner,
+                //Age = animal.Age,
                 BreedId = animal.BreedId
             };
 
@@ -70,9 +70,9 @@ namespace VetRegister.Controllers
             return View(new AddAndEditAnimalFormModel
             {
                 Name = currentAnimal.Name,
-                Age = currentAnimal.Age,
+                //Age = currentAnimal.Age,
                 BreedId = currentAnimal.BreedId,
-                Owner = currentAnimal.Owner,
+                //Owner = currentAnimal.Owner,
                 Breeds = this.GetAnimalBreeds(),
                 BreedName = currentAnimal.Breed.Name
             });
@@ -84,9 +84,9 @@ namespace VetRegister.Controllers
         {
             var currentAnimal = this.data.Animals.Find(id);
 
-            currentAnimal.Owner = modelAnimal.Owner;
+            //currentAnimal.Owner = modelAnimal.Owner;
             currentAnimal.Name = modelAnimal.Name;
-            currentAnimal.Age = modelAnimal.Age;
+            //currentAnimal.Age = modelAnimal.Age;
             currentAnimal.BreedId = modelAnimal.BreedId;
 
             this.data.SaveChanges();
@@ -110,9 +110,9 @@ namespace VetRegister.Controllers
             return View(new AddAndEditAnimalFormModel
             {
                 Name = currentAnimal.Name,
-                Age = currentAnimal.Age,
+                //Age = currentAnimal.Age,
                 BreedId = currentAnimal.BreedId,
-                Owner = currentAnimal.Owner,
+                //Owner = currentAnimal.Owner,
                 Breeds = this.GetAnimalBreeds(),
                 BreedName = GetBreedName(currentAnimal.BreedId),
                 AnimalId = currentAnimal.Id,
@@ -153,24 +153,24 @@ namespace VetRegister.Controllers
                 //animalsQuery = animalsQuery.Where(a => a.Breed.Name.Contains(breedFilter));
             }
 
-            int parsedAge;
-            if (int.TryParse(ageFilter, out parsedAge))
-            {
-                animalsQuery = animalsQuery.Where(a => a.Age.Equals(parsedAge));
-            }
+            //int parsedAge;
+            //if (int.TryParse(ageFilter, out parsedAge))
+            //{
+            //    animalsQuery = animalsQuery.Where(a => a.Age.Equals(parsedAge));
+            //}
 
-            if (!string.IsNullOrWhiteSpace(ownerFilter))
-            {
-                animalsQuery = animalsQuery.Where(a => a.Owner.Contains(ownerFilter));
-            }
+            //if (!string.IsNullOrWhiteSpace(ownerFilter))
+            //{
+            //    animalsQuery = animalsQuery.Where(a => a.Owner.Contains(ownerFilter));
+            //}
 
             var animals = animalsQuery
                 .Select(a => new AnimalListingViewModel
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    Owner = a.Owner,
-                    Age = a.Age,
+                    //Owner = a.Owner,
+                    //Age = a.Age,
                     BreedId = a.BreedId,
                     BreedName = a.Breed.Name
                 })
@@ -213,7 +213,7 @@ namespace VetRegister.Controllers
                 .Where(e => e.AnimalId == animalId)
                 .Select(e => new ExamFormModel
                 {
-                    Text = e.Text,
+                    Description = e.Description,
                     CreatedOn = e.CreatedOn
                 })
                 .ToList();

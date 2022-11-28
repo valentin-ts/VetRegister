@@ -8,7 +8,6 @@ namespace VetRegister.Data.Models
 {
     public class Animal
     {
-        
         public int Id { get; set; }
         
         [Required]
@@ -16,18 +15,19 @@ namespace VetRegister.Data.Models
         [MaxLength(20)]
         public string Name { get; set; }
 
-        [Required]
-        [MinLength(2)]
-        [MaxLength(20)]
-        public string Owner { get; set; }
+        public bool GenderIsMale { get; set; }
 
-        [Required]        
-        public int Age { get; set; }
+        public DateTime DateOfBirth { get; set; }
+
+        //[Required]
+        //[MinLength(2)]
+        //[MaxLength(20)]
+        //public string Owner { get; set; }
 
         public int BreedId { get; set; }
 
         public Breed Breed { get; set; }
 
-        public IEnumerable<Exam> Exams { get; set; } = new List<Exam>();
+        public IEnumerable<Procedure> Exams { get; set; } = new List<Procedure>();
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using VetRegister.Areas.Users.Data;
 using VetRegister.Data.Models;
 
 namespace VetRegister.Data
@@ -18,7 +17,7 @@ namespace VetRegister.Data
 
         public DbSet<Animal> Animals { get; init; }
         public DbSet<Breed> Breeds { get; init; }
-        public DbSet<Exam> Exams { get; init; }
+        public DbSet<Procedure> Exams { get; init; }
         //public DbSet<Person> Persons{ get; init; }
 
 
@@ -36,7 +35,7 @@ namespace VetRegister.Data
             //    .HasForeignKey<Person>(u => u.UserId)
             //    .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Exam>()
+            builder.Entity<Procedure>()
                 .HasOne(a => a.Animal)
                 .WithMany(e => e.Exams)
                 .HasForeignKey(a => a.AnimalId)

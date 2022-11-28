@@ -30,10 +30,10 @@ namespace VetRegister.Controllers
             //Animal currentAnimal = this.data.Animals.Include(a => a.Breed).FirstOrDefault(a => a.Id == animalId);
             Animal currentAnimal = this.data.Animals.Find(id);
 
-            Exam currentExam = new Exam
+            Procedure currentExam = new Procedure
             {
                 Animal = currentAnimal,
-                Text = model.Text,
+                Description = model.Description,
                 CreatedOn = DateTime.UtcNow
             };
 

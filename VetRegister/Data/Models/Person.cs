@@ -5,7 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using VetRegister.Data.Models;
 
-namespace VetRegister.Areas.Users.Data
+namespace VetRegister.Data.models
+
 {
     public abstract class Person
     {
@@ -16,8 +17,6 @@ namespace VetRegister.Areas.Users.Data
         public bool IsDoctor { get; set; }
 
         public bool IsOwner { get; set; }
-
-
 
     }
 }
