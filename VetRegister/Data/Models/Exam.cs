@@ -19,9 +19,9 @@ namespace VetRegister.Data.Models
         public Animal Animal { get; set; }
 
 
-        public int PersonId { get; set; }
+        public int DoctorId { get; set; }
 
-        public Person Person { get; set; }
+        public Doctor Doctor { get; set; }
 
 
         public int ProcedureId { get; set; }

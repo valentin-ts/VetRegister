@@ -10,8 +10,8 @@ using VetRegister.Data;
 namespace VetRegister.Data.Migrations
 {
     [DbContext(typeof(VetRegisterDbContext))]
-    [Migration("20221128154108_PersonProcedure")]
-    partial class PersonProcedure
+    [Migration("20221129174027_ProcedureOwnerDoctorClinic")]
+    partial class ProcedureOwnerDoctorClinic
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -242,14 +242,14 @@ namespace VetRegister.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("PersonId")
+                    b.Property<int>("OwnerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BreedId");
 
-                    b.HasIndex("PersonId");
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Animals");
                 });
@@ -263,11 +263,33 @@ namespace VetRegister.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Breeds");
+                });
+
+            modelBuilder.Entity("VetRegister.Data.Models.Clinic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clinics");
                 });
 
             modelBuilder.Entity("VetRegister.Data.Models.Exam", b =>
@@ -286,7 +308,7 @@ namespace VetRegister.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PersonId")
+                    b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProcedureId")
@@ -296,7 +318,7 @@ namespace VetRegister.Data.Migrations
 
                     b.HasIndex("AnimalId");
 
-                    b.HasIndex("PersonId");
+                    b.HasIndex("DoctorId");
 
                     b.HasIndex("ProcedureId");
 
@@ -310,11 +332,13 @@ namespace VetRegister.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("IsDoctor")
-                        .HasColumnType("bit");
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsOwner")
-                        .HasColumnType("bit");
+                    b.Property<string>("FullName")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("PersonId")
                         .HasColumnType("nvarchar(450)");
@@ -325,7 +349,9 @@ namespace VetRegister.Data.Migrations
                         .IsUnique()
                         .HasFilter("[PersonId] IS NOT NULL");
 
-                    b.ToTable("Persons");
+                    b.ToTable("Person");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Person");
                 });
 
             modelBuilder.Entity("VetRegister.Data.Models.Procedure", b =>
@@ -337,11 +363,39 @@ namespace VetRegister.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Procedures");
+                });
+
+            modelBuilder.Entity("VetRegister.Data.Models.Doctor", b =>
+                {
+                    b.HasBaseType("VetRegister.Data.Models.Person");
+
+                    b.Property<int>("ClinicId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("ClinicId");
+
+                    b.HasDiscriminator().HasValue("Doctor");
+                });
+
+            modelBuilder.Entity("VetRegister.Data.Models.Owner", b =>
+                {
+                    b.HasBaseType("VetRegister.Data.Models.Person");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasDiscriminator().HasValue("Owner");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -403,15 +457,15 @@ namespace VetRegister.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VetRegister.Data.Models.Person", "Person")
+                    b.HasOne("VetRegister.Data.Models.Owner", "Owner")
                         .WithMany("Animals")
-                        .HasForeignKey("PersonId")
+                        .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Breed");
 
-                    b.Navigation("Person");
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("VetRegister.Data.Models.Exam", b =>
@@ -422,9 +476,9 @@ namespace VetRegister.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VetRegister.Data.Models.Person", "Person")
+                    b.HasOne("VetRegister.Data.Models.Doctor", "Doctor")
                         .WithMany("Exams")
-                        .HasForeignKey("PersonId")
+                        .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -436,7 +490,7 @@ namespace VetRegister.Data.Migrations
 
                     b.Navigation("Animal");
 
-                    b.Navigation("Person");
+                    b.Navigation("Doctor");
 
                     b.Navigation("Procedure");
                 });
@@ -449,6 +503,17 @@ namespace VetRegister.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("VetRegister.Data.Models.Doctor", b =>
+                {
+                    b.HasOne("VetRegister.Data.Models.Clinic", "Clinic")
+                        .WithMany("Doctors")
+                        .HasForeignKey("ClinicId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Clinic");
+                });
+
             modelBuilder.Entity("VetRegister.Data.Models.Animal", b =>
                 {
                     b.Navigation("Exams");
@@ -459,16 +524,24 @@ namespace VetRegister.Data.Migrations
                     b.Navigation("Animals");
                 });
 
-            modelBuilder.Entity("VetRegister.Data.Models.Person", b =>
+            modelBuilder.Entity("VetRegister.Data.Models.Clinic", b =>
                 {
-                    b.Navigation("Animals");
-
-                    b.Navigation("Exams");
+                    b.Navigation("Doctors");
                 });
 
             modelBuilder.Entity("VetRegister.Data.Models.Procedure", b =>
                 {
                     b.Navigation("Exams");
+                });
+
+            modelBuilder.Entity("VetRegister.Data.Models.Doctor", b =>
+                {
+                    b.Navigation("Exams");
+                });
+
+            modelBuilder.Entity("VetRegister.Data.Models.Owner", b =>
+                {
+                    b.Navigation("Animals");
                 });
 #pragma warning restore 612, 618
         }

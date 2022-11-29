@@ -11,6 +11,7 @@ namespace VetRegister.Data.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(20)]
         public string Name { get; set; }
 
         public IEnumerable<Exam> Exams { get; set; } = new List<Exam>();

@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace VetRegister.Data.Models
 {
-    public class Breed
+    public class Doctor : Person
     {
-        public int Id { get; set; }
-
-        [Required]
         [MaxLength(20)]
-        public string Name { get; set; }
+        public IEnumerable<Exam> Exams { get; set; } = new List<Exam>();
 
-        public IEnumerable<Animal> Animals { get; set; } = new List<Animal>();
+
+        public int ClinicId { get; set; }
+
+        public Clinic Clinic { get; set; }
     }
 }

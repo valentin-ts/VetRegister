@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VetRegister.Data.Models
 {
-    public class Breed
+    public class Clinic
     {
         public int Id { get; set; }
 
@@ -14,6 +14,9 @@ namespace VetRegister.Data.Models
         [MaxLength(20)]
         public string Name { get; set; }
 
-        public IEnumerable<Animal> Animals { get; set; } = new List<Animal>();
+        [MaxLength(20)]
+        public string PhoneNumber { get; set; }
+
+        public IEnumerable<Doctor> Doctors { get; set; } = new List<Doctor>();
     }
 }

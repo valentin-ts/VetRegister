@@ -23,8 +23,7 @@ namespace VetRegister.Controllers
             return View(new AddAndEditAnimalFormModel
             {
                 Breeds = this.GetAnimalBreeds()
-            }
-            );
+            });
         }
 
         [HttpPost]

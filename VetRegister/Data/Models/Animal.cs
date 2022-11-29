@@ -20,14 +20,15 @@ namespace VetRegister.Data.Models
         public DateTime DateOfBirth { get; set; }
 
 
-        public int PersonId { get; set; }
+        public int OwnerId { get; set; }
 
-        public Person Person { get; set; }
+        public Owner Owner { get; set; }
 
 
         public int BreedId { get; set; }
 
         public Breed Breed { get; set; }
+
 
         public IEnumerable<Exam> Exams { get; set; } = new List<Exam>();
     }

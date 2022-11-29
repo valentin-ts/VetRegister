@@ -18,8 +18,10 @@ namespace VetRegister.Data
         public DbSet<Animal> Animals { get; init; }
         public DbSet<Breed> Breeds { get; init; }
         public DbSet<Exam> Exams { get; init; }
-        public DbSet<Person> Persons { get; init; }
         public DbSet<Procedure> Procedures { get; init; }
+        public DbSet<Owner> Owners { get; init; }
+        public DbSet<Doctor> Doctors { get; init; }
+        public DbSet<Clinic> Clinics { get; init; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -30,9 +32,9 @@ namespace VetRegister.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Animal>()
-                .HasOne(p => p.Person)
+                .HasOne(o => o.Owner)
                 .WithMany(a => a.Animals)
-                .HasForeignKey(p => p.PersonId)
+                .HasForeignKey(p => p.OwnerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Animal>()
@@ -41,22 +43,28 @@ namespace VetRegister.Data
                 .HasForeignKey(b => b.BreedId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Doctor>()
+                .HasOne(c => c.Clinic)
+                .WithMany(d => d.Doctors)
+                .HasForeignKey(c => c.ClinicId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.Entity<Exam>()
-                .HasOne(p => p.Person)
-                .WithMany(a => a.Exams)
-                .HasForeignKey(p => p.PersonId)
+                .HasOne(a => a.Animal)
+                .WithMany(e => e.Exams)
+                .HasForeignKey(a => a.AnimalId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Exam>()
+                .HasOne(d => d.Doctor)
+                .WithMany(e => e.Exams)
+                .HasForeignKey(p => p.DoctorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Exam>()
                 .HasOne(p => p.Procedure)
                 .WithMany(a => a.Exams)
                 .HasForeignKey(p => p.ProcedureId)
-                .OnDelete(DeleteBehavior.Restrict);
-            
-            builder.Entity<Exam>()
-                .HasOne(a => a.Animal)
-                .WithMany(e => e.Exams)
-                .HasForeignKey(a => a.AnimalId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
