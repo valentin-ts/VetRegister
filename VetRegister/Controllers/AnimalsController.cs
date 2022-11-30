@@ -133,7 +133,6 @@ namespace VetRegister.Controllers
             this.data.SaveChanges();
 
             return RedirectToAction("All");
-
         }
 
 

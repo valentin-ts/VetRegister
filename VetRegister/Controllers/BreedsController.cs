@@ -25,8 +25,6 @@ namespace VetRegister.Controllers
             //var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             //var userIsDoctor = this.data.Doctors.Any(d => d.UserId == userId);
 
-   
-
             return View(new AllBreedsViewModel
                 {
                     AllBreedsList = this.GetAnimalBreeds()
