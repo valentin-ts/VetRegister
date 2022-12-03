@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace VetRegister.Models.Breeds
 {
-    public class SingleBreedViewModel
+    public class BreedViewModel
     {
         public int Id { get; init; }
 

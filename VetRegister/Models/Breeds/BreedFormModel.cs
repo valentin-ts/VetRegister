@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace VetRegister.Models.Breeds
 {
-    public class AllBreedsViewModel
+    public class BreedFormModel
     {
-        //public int BreedId { get; set; }
-
-
+        [MaxLength(20)]
         public string NewBreedName { get; set; }
 
-        public IEnumerable<SingleBreedViewModel> AllBreedsList { get; set; }
+        public IEnumerable<BreedViewModel> AllBreedsList { get; set; }
     }
 }

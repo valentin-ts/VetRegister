@@ -69,6 +69,48 @@ namespace VetRegister.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+        public IActionResult BecomeOwner()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult BecomeOwner(BecomeOwnerFormModel owner)
+        {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            //var userIdsAlreadyDoctor (or an owner??)= this.data
+            //    .Doctors
+            //    .Any(d => d.PersonId == userId); ???
+
+            //if (userIdsAlreadyDoctor)
+            //{
+            //    return BadRequest();
+            //}
+
+            //check if ClinicId exists in database
+
+            if (!ModelState.IsValid)
+            {
+                 return View(owner);
+            }
+
+            var newOwner = new Owner
+            {
+                FullName = owner.FullName,
+                PersonId = userId,
+                Address = owner.Address,
+                PhoneNumber = owner.PhoneNumber
+            };
+
+            this.data.Owners.Add(newOwner);
+            this.data.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
+        }
+
         private IEnumerable<ClinicViewModel> GetAllClinics()
         {
             return this.data

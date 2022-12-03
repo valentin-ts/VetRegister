@@ -1,18 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using VetRegister.Data;
 using VetRegister.Infrastructure;
+using VetRegister.Services.Persons;
 
 namespace VetRegister
 {
@@ -29,8 +24,8 @@ namespace VetRegister
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<VetRegisterDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options =>
@@ -43,7 +38,10 @@ namespace VetRegister
                 options.Password.RequiredUniqueChars = 0;
             })
                 .AddEntityFrameworkStores<VetRegisterDbContext>();
+
             services.AddControllersWithViews();
+
+            services.AddTransient<IPersonService, PersonService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

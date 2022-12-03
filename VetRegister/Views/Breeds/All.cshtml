@@ -1,0 +1,43 @@
+﻿
+@model BreedFormModel 
+
+@{ 
+    ViewData["Title"] = "View All Breeds";
+}
+
+<form method="post">
+    <br>
+    <label class="text-body">Existing breeds:</label>
+    <br>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <label>Breed Name</label>
+                </th>
+                <th scope="col">
+                    <label>Breed Modify</label>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var breed in Model.AllBreedsList)
+            {
+                <tr>
+                    <td>@breed.Name</td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Breeds" asp-action="Edit" asp-route-id="@breed.Id">Edit</a>
+                        <a class="btn btn-primary" asp-controller="Breeds" asp-action="Delete" asp-route-id="@breed.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br>
+    <div class="form-group">
+        <label class="text-body">Add new breed:</label>
+        <input asp-for="NewBreedName" class="form-control" placeholder="Give me new breed">
+        <span asp-validation-for="NewBreedName" class="small text-danger"></span>
+    </div>
+    <input class="btn btn-primary float-right" type="submit" value="Save" />
+</form>

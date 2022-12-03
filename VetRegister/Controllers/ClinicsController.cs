@@ -11,7 +11,7 @@ using VetRegister.Data.Models;
 using VetRegister.Models.Clinics;
 using VetRegister.Models.Persons;
 
-namespace VetRegister.Controllers
+namespace VetRegister.Areas.Clinics.Controllers
 {
     public class ClinicsController : Controller
     {
