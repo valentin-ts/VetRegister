@@ -9,6 +9,7 @@ namespace VetRegister.Models.Breeds
 {
     public class BreedFormModel
     {
+        [Required]
         [MaxLength(20)]
         public string NewBreedName { get; set; }
 

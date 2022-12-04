@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using VetRegister.Data;
 using VetRegister.Data.Models;
 using VetRegister.Models.Animals;
@@ -20,15 +23,18 @@ namespace VetRegister.Controllers
 
         public IActionResult Add()
         {
-            return View(new AddAndEditAnimalFormModel
+            return View(new AnimalFormModel
             {
                 Breeds = this.GetAnimalBreeds()
             });
         }
 
+        [Authorize]
         [HttpPost]
-        public IActionResult Add(AddAndEditAnimalFormModel animal)
+        public IActionResult Add(AnimalFormModel animal)
         {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             //check if BreedId exists in database
             if (!this.data.Breeds.Any(b => b.Id == animal.BreedId))
             {
@@ -45,8 +51,8 @@ namespace VetRegister.Controllers
             var newAnimal = new Animal
             {
                 Name = animal.Name,
-                //Owner = animal.Owner,
-                //Age = animal.Age,
+                Owner = data.Owners.FirstOrDefault(o => o.PersonId == userId),
+                DateOfBirth = DateTime.Parse(animal.DateOfBirth),
                 BreedId = animal.BreedId
             };
 
@@ -58,34 +64,35 @@ namespace VetRegister.Controllers
 
         public IActionResult Edit(int id)
         {
-            //var currentAnimal = this.data.Animals.Find(id);
-            var currentAnimal = this.data.Animals.Include(a => a.Breed).FirstOrDefault(a => a.Id == id);
+            //check if owner is correct
+            var currentAnimal = this.data.Animals.Find(id);
+            //var currentAnimal = this.data.Animals.Include(a => a.Breed).FirstOrDefault(a => a.Id == id);
 
             if (currentAnimal == null)
             {
                 return BadRequest();
             }
 
-            return View(new AddAndEditAnimalFormModel
+            return View(new AnimalFormModel
             {
                 Name = currentAnimal.Name,
-                //Age = currentAnimal.Age,
+                DateOfBirth = currentAnimal.DateOfBirth.ToString("d"),
                 BreedId = currentAnimal.BreedId,
-                //Owner = currentAnimal.Owner,
                 Breeds = this.GetAnimalBreeds(),
-                BreedName = currentAnimal.Breed.Name
+                //BreedName = currentAnimal.Breed.Name - To use this way, must use Include(a => a.Breed)
+                BreedName = GetBreedName(currentAnimal.BreedId)
             });
 
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, AddAndEditAnimalFormModel modelAnimal)
+        public IActionResult Edit(int id, AnimalFormModel modelAnimal)
         {
+            //check if owner is correct
             var currentAnimal = this.data.Animals.Find(id);
 
-            //currentAnimal.Owner = modelAnimal.Owner;
             currentAnimal.Name = modelAnimal.Name;
-            //currentAnimal.Age = modelAnimal.Age;
+            currentAnimal.DateOfBirth = DateTime.Parse(modelAnimal.DateOfBirth);
             currentAnimal.BreedId = modelAnimal.BreedId;
 
             this.data.SaveChanges();
@@ -96,22 +103,20 @@ namespace VetRegister.Controllers
 
         public IActionResult Details(int id)
         {
-            //var currentAnimal = this.data.Animals.Find(id);
-            var currentAnimal = this.data.Animals.Include(a => a.Breed).Include(e => e.Exams).FirstOrDefault(a => a.Id == id);
-
-
+            var currentAnimal = this.data.Animals.Find(id);
+            //var currentAnimal = this.data.Animals.Include(a => a.Breed).Include(e => e.Exams).FirstOrDefault(a => a.Id == id);
 
             if (currentAnimal == null)
             {
                 return BadRequest();
             }
 
-            return View(new AddAndEditAnimalFormModel
+            return View(new AnimalFormModel
             {
                 Name = currentAnimal.Name,
-                //Age = currentAnimal.Age,
+                DateOfBirth = currentAnimal.DateOfBirth.ToString("d"),
+                Age = (DateTime.UtcNow.Year - currentAnimal.DateOfBirth.Year).ToString(),
                 BreedId = currentAnimal.BreedId,
-                //Owner = currentAnimal.Owner,
                 Breeds = this.GetAnimalBreeds(),
                 BreedName = GetBreedName(currentAnimal.BreedId),
                 AnimalId = currentAnimal.Id,
@@ -122,6 +127,7 @@ namespace VetRegister.Controllers
 
         public IActionResult Delete(int id)
         {
+            //check for exams etc...
             var currentAnimal = this.data.Animals.Find(id);
 
             if (currentAnimal == null)
@@ -136,7 +142,7 @@ namespace VetRegister.Controllers
         }
 
 
-        public IActionResult All(string nameFilter, string breedFilter, string ageFilter, string ownerFilter)
+        public IActionResult All(string nameFilter, string breedFilter, string dateOfBirthFilter, string ageFilter)
         {
             var animalsQuery = this.data.Animals.AsQueryable();
 
@@ -151,24 +157,25 @@ namespace VetRegister.Controllers
                 //animalsQuery = animalsQuery.Where(a => a.Breed.Name.Contains(breedFilter));
             }
 
-            //int parsedAge;
-            //if (int.TryParse(ageFilter, out parsedAge))
-            //{
-            //    animalsQuery = animalsQuery.Where(a => a.Age.Equals(parsedAge));
-            //}
+            DateTime dateOfBirth;
+            if (DateTime.TryParse(dateOfBirthFilter, out dateOfBirth))
+            {
+                animalsQuery = animalsQuery.Where(a => a.DateOfBirth == DateTime.Parse(dateOfBirthFilter));
+            }
 
-            //if (!string.IsNullOrWhiteSpace(ownerFilter))
-            //{
-            //    animalsQuery = animalsQuery.Where(a => a.Owner.Contains(ownerFilter));
-            //}
+            int parsedAge;
+            if (int.TryParse(ageFilter, out parsedAge))
+            {
+                animalsQuery = animalsQuery.Where(a => (DateTime.UtcNow.Year - a.DateOfBirth.Year) == parsedAge);
+            }
 
             var animals = animalsQuery
-                .Select(a => new AnimalListingViewModel
+                .Select(a => new AnimalViewModel
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    //Owner = a.Owner,
-                    //Age = a.Age,
+                    DateOfBirth = a.DateOfBirth.ToString("d"),
+                    Age = (DateTime.UtcNow.Year - a.DateOfBirth.Year).ToString(),
                     BreedId = a.BreedId,
                     BreedName = a.Breed.Name
                 })
@@ -180,17 +187,12 @@ namespace VetRegister.Controllers
                 .Distinct()
                 .ToList();
 
-            //AnimalBreeds.Insert(0, null);
-
             return View(new AllAnimalsQueryModel
             {
                 Animals = animals,
-                //NameFilter = nameFilter,
                 Breeds = AnimalBreeds
             });
         }
-
-
 
         private IEnumerable<AnimalBreedViewModel> GetAnimalBreeds()
         {

@@ -1,4 +1,4 @@
-﻿@model AddAndEditAnimalFormModel
+﻿@model AnimalFormModel
 
 @{
     ViewData["Title"] = "Details for Animal";
@@ -10,12 +10,12 @@
         <a for="Name" class="col-sm-10 col-form-label">@Model.Name</a>
     </div>
     <div class="form-group row">
-        <label for="Age" class="col-sm-2 col-form-label">Age:</label>
-        <a for="Age" class="col-sm-10 col-form-label">@Model.Age</a>
+        <label for="Age" class="col-sm-2 col-form-label">DateOfBirth:</label>
+        <a for="Age" class="col-sm-10 col-form-label">@Model.DateOfBirth</a>
     </div>
     <div class="form-group row">
-        <label for="Owner" class="col-sm-2 col-form-label">Owner:</label>
-        <a for="Owner" class="col-sm-10 col-form-label">@Model.Owner</a>
+        <label for="Age" class="col-sm-2 col-form-label">Age:</label>
+        <a for="Age" class="col-sm-10 col-form-label">@Model.Age</a>
     </div>
     <div class="form-group row">
         <label for="Breed" class="col-sm-2 col-form-label">Breed:</label>
@@ -26,15 +26,15 @@
     <a class="btn btn-primary" asp-controller="Animals" asp-action="Delete" asp-route-id="@Model.AnimalId">Delete</a>
     <a class="btn btn-primary" asp-controller="Exams" asp-action="Add" asp-route-id="@Model.AnimalId">Add Exam</a>
 
-<div>
-    @foreach (var exam in Model.Exams)
-    {
-        <div class="input-group  m-1">
-            <div class="input-group-prepend">
-                <span class="input-group-text">@exam.CreatedOn.ToLocalTime()</span>
+    <div>
+        @foreach (var exam in Model.Exams)
+        {
+            <div class="input-group  m-1">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">@exam.CreatedOn.ToLocalTime()</span>
+                </div>
+                <textarea class="form-control" aria-label="With textarea">@exam.Description</textarea>
             </div>
-            <textarea class="form-control" aria-label="With textarea">@exam.Description</textarea>
-        </div>
-    }
-</div>
+        }
+    </div>
 </form>

@@ -1,5 +1,5 @@
 ﻿
-@model AddAndEditAnimalFormModel 
+@model AnimalFormModel 
 
 @{ 
     ViewData["Title"] = "Add Animal";
@@ -12,17 +12,12 @@
         <span asp-validation-for="Name" class="small text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Owner"></label>
-        <input asp-for="Owner" class="form-control" placeholder="Give me an owner">
-        <span asp-validation-for="Owner" class="small text-danger"></span>
+        <label asp-for="DateOfBirth"></label>
+        <input asp-for="DateOfBirth" class="form-control" placeholder="Give me a birday.">
+        <span asp-validation-for="DateOfBirth" class="small text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Age"></label>
-        <input asp-for="Age" class="form-control" placeholder="Tell my age">
-        <span asp-validation-for="Age" class="small text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="BreedId">Example select</label>
+        <label asp-for="BreedId">Breed:</label>
         <select asp-for="BreedId" class="form-control">
             @foreach (var breed in Model.Breeds)
             {
@@ -30,9 +25,9 @@
             }
         </select>
     </div>
-    <div class="form-group">
+    @*<div class="form-group">
         <label for="exampleFormControlTextarea1">Example textarea</label>
         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-    </div>
+    </div>*@
     <input class="btn btn-primary float-right" type="submit" value="Save" />
 </form>

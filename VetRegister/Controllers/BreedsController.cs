@@ -35,7 +35,12 @@ namespace VetRegister.Controllers
         [HttpPost]
         public IActionResult All(BreedFormModel breed)
         {
-            //if breed exists
+            if (!ModelState.IsValid)
+            {
+                breed.AllBreedsList = this.GetAnimalBreeds();
+                return View(breed);
+            }
+
             if (this.data.Breeds.Any(b => b.Name == breed.NewBreedName))
             {
                 return RedirectToAction("Exists", "Breeds");  //Make a controller for this
@@ -73,7 +78,37 @@ namespace VetRegister.Controllers
             return RedirectToAction("All");
         }
 
+        public IActionResult Edit(int id)
+        {
+            var currentBreed = this.data.Breeds.Find(id);
 
+            if (currentBreed == null)
+            {
+                return BadRequest();
+            }
+
+            return View(new BreedFormModel
+            {
+                NewBreedName = currentBreed.Name
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, BreedFormModel modelBreed)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(modelBreed);
+            }
+
+            var currentBreed = this.data.Breeds.Find(id);
+
+            currentBreed.Name = modelBreed.NewBreedName;
+
+            this.data.SaveChanges();
+
+            return RedirectToAction("All");
+        }
 
         private IEnumerable<BreedViewModel> GetAnimalBreeds()
         {
