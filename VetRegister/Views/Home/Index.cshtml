@@ -16,14 +16,14 @@
     if (Persons.IsDoctor(userId))
     {
         <div class="text-center">
-            <h1 class="display-4">Doctor</h1>
+            <h1 class="display-4">You are registered as doctor.</h1>
         </div>
     }
 
     else if (Persons.IsOwner(userId))
     {
         <div class="text-center">
-            <h1 class="display-4">Owner</h1>
+            <h1 class="display-4">You are registered as owner.</h1>
         </div>
     }
 
@@ -42,6 +42,6 @@
 else
 {
     <div class="text-center">
-        <h1 class="display-4">Not registered</h1>
+        <h1 class="display-4">You are not logged in.</h1>
     </div>
 }

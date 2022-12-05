@@ -2,7 +2,7 @@
 @model BreedFormModel 
 
 @{ 
-    ViewData["Title"] = "View All Breeds";
+    ViewData["Title"] = "All Breeds";
 }
 
 <form method="post">
@@ -34,10 +34,12 @@
         </tbody>
     </table>
     <br>
+
     <div class="form-group">
         <label class="text-body">Add new breed:</label>
         <input asp-for="NewBreedName" class="form-control" placeholder="Give me new breed">
         <span asp-validation-for="NewBreedName" class="small text-danger"></span>
     </div>
     <input class="btn btn-primary float-right" type="submit" value="Save" />
+
 </form>

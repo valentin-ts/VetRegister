@@ -1,7 +1,7 @@
-﻿@model AnimalFormModel
+﻿@model AnimalViewModel
 
 @{
-    ViewData["Title"] = "Details for Animal";
+    ViewData["Title"] = "Animal Details";
 }
 
 <form>
@@ -21,20 +21,24 @@
         <label for="Breed" class="col-sm-2 col-form-label">Breed:</label>
         <a for="Breed" class="col-sm-10 col-form-label">@Model.BreedName</a>
     </div>
-
-    <a class="btn btn-primary" asp-controller="Animals" asp-action="Edit" asp-route-id="@Model.AnimalId">Edit</a>
-    <a class="btn btn-primary" asp-controller="Animals" asp-action="Delete" asp-route-id="@Model.AnimalId">Delete</a>
-    <a class="btn btn-primary" asp-controller="Exams" asp-action="Add" asp-route-id="@Model.AnimalId">Add Exam</a>
-
+    <br>
+    <a class="btn btn-primary" asp-controller="Animals" asp-action="Edit" asp-route-id="@Model.Id">Edit animal</a>
+    <a class="btn btn-primary" asp-controller="Animals" asp-action="Delete" asp-route-id="@Model.Id">Delete animal</a>
+    <br>
+    <br>
+    <br>
+    <label class="col-sm-2 col-form-label">Exams for this animal:</label>
     <div>
         @foreach (var exam in Model.Exams)
         {
-            <div class="input-group  m-1">
+            <div class="input-group m-1">
                 <div class="input-group-prepend">
-                    <span class="input-group-text">@exam.CreatedOn.ToLocalTime()</span>
+                    <span class="input-group-text">@exam.CreatedOn, @exam.DoctorName</span>
                 </div>
-                <textarea class="form-control" aria-label="With textarea">@exam.Description</textarea>
+                <output class="form-control" aria-label="With textarea">@exam.Description</output>
             </div>
         }
     </div>
+    <br>
+    <a class="btn btn-primary" asp-controller="Exams" asp-action="Add" asp-route-id="@Model.Id">Add new exam</a>
 </form>

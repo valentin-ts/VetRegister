@@ -35,17 +35,15 @@ namespace VetRegister.Controllers
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            //check if BreedId exists in database
-            if (!this.data.Breeds.Any(b => b.Id == animal.BreedId))
-            {
-                return BadRequest();
-            }
-
-            //check if model statie is invalid, add breeds again.
             if (!ModelState.IsValid)
             {
                 animal.Breeds = this.GetAnimalBreeds();
                 return View(animal);
+            }
+
+            if (!this.data.Breeds.Any(b => b.Id == animal.BreedId))
+            {
+                return BadRequest();
             }
 
             var newAnimal = new Animal
@@ -66,7 +64,6 @@ namespace VetRegister.Controllers
         {
             //check if owner is correct
             var currentAnimal = this.data.Animals.Find(id);
-            //var currentAnimal = this.data.Animals.Include(a => a.Breed).FirstOrDefault(a => a.Id == id);
 
             if (currentAnimal == null)
             {
@@ -79,8 +76,6 @@ namespace VetRegister.Controllers
                 DateOfBirth = currentAnimal.DateOfBirth.ToString("d"),
                 BreedId = currentAnimal.BreedId,
                 Breeds = this.GetAnimalBreeds(),
-                //BreedName = currentAnimal.Breed.Name - To use this way, must use Include(a => a.Breed)
-                BreedName = GetBreedName(currentAnimal.BreedId)
             });
 
         }
@@ -111,16 +106,15 @@ namespace VetRegister.Controllers
                 return BadRequest();
             }
 
-            return View(new AnimalFormModel
+            return View(new AnimalViewModel
             {
+                Id = currentAnimal.Id,
                 Name = currentAnimal.Name,
                 DateOfBirth = currentAnimal.DateOfBirth.ToString("d"),
                 Age = (DateTime.UtcNow.Year - currentAnimal.DateOfBirth.Year).ToString(),
                 BreedId = currentAnimal.BreedId,
-                Breeds = this.GetAnimalBreeds(),
                 BreedName = GetBreedName(currentAnimal.BreedId),
-                AnimalId = currentAnimal.Id,
-                Exams = GetAnimalExams(currentAnimal.Id),
+                Exams = GetAnimalExams(currentAnimal.Id)
             });
         }
 
@@ -206,15 +200,16 @@ namespace VetRegister.Controllers
                 .ToList();
         }
 
-        private IEnumerable<ExamFormModel> GetAnimalExams(int animalId)
+        private IEnumerable<ExamViewModel> GetAnimalExams(int animalId)
         {
             return this.data
                 .Exams
                 .Where(e => e.AnimalId == animalId)
-                .Select(e => new ExamFormModel
+                .Select(e => new ExamViewModel
                 {
                     Description = e.Description,
-                    CreatedOn = e.CreatedOn
+                    CreatedOn = e.CreatedOn.ToString("d"),
+                    DoctorName = e.Doctor.FullName
                 })
                 .ToList();
         }
