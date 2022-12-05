@@ -9,49 +9,62 @@ using VetRegister.Data;
 using VetRegister.Data.Models;
 using VetRegister.Models.Animals;
 using VetRegister.Models.Exams;
+using VetRegister.Services.Persons;
 
 namespace VetRegister.Controllers
 {
+    [Authorize]
     public class AnimalsController : Controller
     {
         private readonly VetRegisterDbContext data;
+        private readonly IPersonService person;
 
-        public AnimalsController(VetRegisterDbContext data)
+        public AnimalsController(VetRegisterDbContext data, IPersonService person)
         {
             this.data = data;
+            this.person = person;
         }
 
         public IActionResult Add()
         {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsOwner(userId))
+            {
+                return BadRequest();
+            }
+
             return View(new AnimalFormModel
             {
                 Breeds = this.GetAnimalBreeds()
             });
         }
 
-        [Authorize]
         [HttpPost]
-        public IActionResult Add(AnimalFormModel animal)
+        public IActionResult Add(AnimalFormModel modelAnimal)
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsOwner(userId))
+            {
+                return BadRequest();
+            }
 
             if (!ModelState.IsValid)
             {
-                animal.Breeds = this.GetAnimalBreeds();
-                return View(animal);
+                modelAnimal.Breeds = this.GetAnimalBreeds();
+                return View(modelAnimal);
             }
 
-            if (!this.data.Breeds.Any(b => b.Id == animal.BreedId))
+            if (!this.data.Breeds.Any(b => b.Id == modelAnimal.BreedId))
             {
                 return BadRequest();
             }
 
             var newAnimal = new Animal
             {
-                Name = animal.Name,
+                Name = modelAnimal.Name,
                 Owner = data.Owners.FirstOrDefault(o => o.PersonId == userId),
-                DateOfBirth = DateTime.Parse(animal.DateOfBirth),
-                BreedId = animal.BreedId
+                DateOfBirth = DateTime.Parse(modelAnimal.DateOfBirth),
+                BreedId = modelAnimal.BreedId
             };
 
             data.Animals.Add(newAnimal);
@@ -62,10 +75,20 @@ namespace VetRegister.Controllers
 
         public IActionResult Edit(int id)
         {
-            //check if owner is correct
-            var currentAnimal = this.data.Animals.Find(id);
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsOwner(userId))
+            {
+                return BadRequest();
+            }
+            var ownerId = data.Owners.FirstOrDefault(d => d.PersonId == userId).Id;
 
+            var currentAnimal = this.data.Animals.Find(id);
             if (currentAnimal == null)
+            {
+                return BadRequest();
+            }
+
+            if (currentAnimal.OwnerId != ownerId)
             {
                 return BadRequest();
             }
@@ -83,8 +106,23 @@ namespace VetRegister.Controllers
         [HttpPost]
         public IActionResult Edit(int id, AnimalFormModel modelAnimal)
         {
-            //check if owner is correct
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsOwner(userId))
+            {
+                return BadRequest();
+            }
+            var ownerId = data.Owners.FirstOrDefault(d => d.PersonId == userId).Id;
+
             var currentAnimal = this.data.Animals.Find(id);
+            if (currentAnimal == null)
+            {
+                return BadRequest();
+            }
+
+            if (currentAnimal.OwnerId != ownerId)
+            {
+                return BadRequest();
+            }
 
             currentAnimal.Name = modelAnimal.Name;
             currentAnimal.DateOfBirth = DateTime.Parse(modelAnimal.DateOfBirth);
@@ -98,10 +136,21 @@ namespace VetRegister.Controllers
 
         public IActionResult Details(int id)
         {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsOwner(userId))
+            {
+                return BadRequest();
+            }
+            var ownerId = data.Owners.FirstOrDefault(d => d.PersonId == userId).Id;
+
             var currentAnimal = this.data.Animals.Find(id);
             //var currentAnimal = this.data.Animals.Include(a => a.Breed).Include(e => e.Exams).FirstOrDefault(a => a.Id == id);
-
             if (currentAnimal == null)
+            {
+                return BadRequest();
+            }
+
+            if (currentAnimal.OwnerId != ownerId)
             {
                 return BadRequest();
             }
@@ -121,10 +170,20 @@ namespace VetRegister.Controllers
 
         public IActionResult Delete(int id)
         {
-            //check for exams etc...
-            var currentAnimal = this.data.Animals.Find(id);
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsOwner(userId))
+            {
+                return BadRequest();
+            }
+            var ownerId = data.Owners.FirstOrDefault(d => d.PersonId == userId).Id;
 
+            var currentAnimal = this.data.Animals.Find(id);
             if (currentAnimal == null)
+            {
+                return BadRequest();
+            }
+
+            if (currentAnimal.OwnerId != ownerId)
             {
                 return BadRequest();
             }
@@ -138,6 +197,14 @@ namespace VetRegister.Controllers
 
         public IActionResult All(string nameFilter, string breedFilter, string dateOfBirthFilter, string ageFilter)
         {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsOwner(userId))
+            {
+                return BadRequest();
+            }
+            var ownerId = data.Owners.FirstOrDefault(d => d.PersonId == userId).Id;
+
+
             var animalsQuery = this.data.Animals.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(nameFilter))
@@ -164,6 +231,7 @@ namespace VetRegister.Controllers
             }
 
             var animals = animalsQuery
+                .Where(a => a.OwnerId == ownerId)  // Owner filter - on forever :)
                 .Select(a => new AnimalViewModel
                 {
                     Id = a.Id,
@@ -220,7 +288,5 @@ namespace VetRegister.Controllers
                 .Breeds
                 .FirstOrDefault(b => b.Id == breedId).Name;
         }
-
     }
-
 }

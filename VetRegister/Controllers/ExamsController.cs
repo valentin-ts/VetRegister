@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,20 +9,30 @@ using System.Threading.Tasks;
 using VetRegister.Data;
 using VetRegister.Data.Models;
 using VetRegister.Models.Exams;
+using VetRegister.Services.Persons;
 
 namespace VetRegister.Controllers
 {
+    [Authorize]
     public class ExamsController : Controller
     {
         private readonly VetRegisterDbContext data;
+        private readonly IPersonService person;
 
-        public ExamsController(VetRegisterDbContext data)
+        public ExamsController(VetRegisterDbContext data, IPersonService person)
         {
             this.data = data;
+            this.person = person;
         }
 
         public IActionResult Add(int id)
         {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsDoctor(userId))
+            {
+                return BadRequest();
+            }
+
             return View(new ExamFormModel
             {
                 Procedures = this.GetExamProcedures()
@@ -31,6 +42,12 @@ namespace VetRegister.Controllers
         [HttpPost]
         public IActionResult Add(int id, ExamFormModel modelExam)
         {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsDoctor(userId))
+            {
+                return BadRequest();
+            }
+
             if (!ModelState.IsValid)
             {
                 modelExam.Procedures = this.GetExamProcedures();
@@ -38,7 +55,6 @@ namespace VetRegister.Controllers
             }
 
             Animal currentAnimal = this.data.Animals.Find(id);
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var currentDoctor = data.Doctors.FirstOrDefault(d => d.PersonId == userId);
 
             Exam newExam = new Exam
@@ -53,21 +69,38 @@ namespace VetRegister.Controllers
             this.data.Exams.Add(newExam);
             this.data.SaveChanges();
 
-            return RedirectToAction("All", "Exams", new { id = id });
+            return RedirectToAction("All", "Exams", new { id });
         }
 
         public IActionResult All()
         {
-            return View(GetAllExams());
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsDoctor(userId))
+            {
+                return BadRequest();
+            }
+
+            return View(GetAllExamsForDoctor(userId));
         }
 
 
         public IActionResult Details(int id)
         {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsDoctor(userId))
+            {
+                return BadRequest();
+            }
+            var doctorId = data.Doctors.FirstOrDefault(d => d.PersonId == userId).Id;
+
             //var currentExam = this.data.Exams.Find(id);
             var currentExam = this.data.Exams.Include(e => e.Animal).Include(e => e.Doctor).Include(e => e.Procedure).FirstOrDefault(e => e.Id == id);
-
             if (currentExam == null)
+            {
+                return BadRequest();
+            }
+
+            if (currentExam.DoctorId != doctorId)
             {
                 return BadRequest();
             }
@@ -85,10 +118,20 @@ namespace VetRegister.Controllers
 
         public IActionResult Delete(int id)
         {
-            //check for exams etc...
-            var currentExam = this.data.Exams.Find(id);
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsDoctor(userId))
+            {
+                return BadRequest();
+            }
+            var doctorId = data.Doctors.FirstOrDefault(d => d.PersonId == userId).Id;
 
+            var currentExam = this.data.Exams.Find(id);
             if (currentExam == null)
+            {
+                return BadRequest();
+            }
+
+            if (currentExam.DoctorId != doctorId)
             {
                 return BadRequest();
             }
@@ -103,10 +146,20 @@ namespace VetRegister.Controllers
 
         public IActionResult Edit(int id)
         {
-            //check if owner is correct
-            var currentExam = this.data.Exams.Find(id);
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsDoctor(userId))
+            {
+                return BadRequest();
+            }
+            var doctorId = data.Doctors.FirstOrDefault(d => d.PersonId == userId).Id;
 
+            var currentExam = this.data.Exams.Find(id);
             if (currentExam == null)
+            {
+                return BadRequest();
+            }
+
+            if (currentExam.DoctorId != doctorId)
             {
                 return BadRequest();
             }
@@ -123,8 +176,23 @@ namespace VetRegister.Controllers
         [HttpPost]
         public IActionResult Edit(int id, ExamFormModel modelExam)
         {
-            //check if owner is correct
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!person.IsDoctor(userId))
+            {
+                return BadRequest();
+            }
+            var doctorId = data.Doctors.FirstOrDefault(d => d.PersonId == userId).Id;
+
             var currentExam = this.data.Exams.Find(id);
+            if (currentExam == null)
+            {
+                return BadRequest();
+            }
+
+            if (currentExam.DoctorId != doctorId)
+            {
+                return BadRequest();
+            }
 
             currentExam.Description = modelExam.Description;
             currentExam.ProcedureId = modelExam.ProcedureId;
@@ -133,16 +201,6 @@ namespace VetRegister.Controllers
 
             return RedirectToAction("All");
         }
-
-
-
-
-
-
-
-
-
-
 
         private IEnumerable<ExamProcedureViewModel> GetExamProcedures()
         {
@@ -156,10 +214,11 @@ namespace VetRegister.Controllers
                 .ToList();
         }
 
-        private IEnumerable<ExamViewModel> GetAllExams()
+        private IEnumerable<ExamViewModel> GetAllExamsForDoctor(string doctorId)
         {
             return this.data
                 .Exams
+                .Where(e => e.Doctor.PersonId == doctorId)
                 .Select(e => new ExamViewModel
                 {
                     Id = e.Id,
