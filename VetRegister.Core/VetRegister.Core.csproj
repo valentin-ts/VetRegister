@@ -1,10 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-VetRegister-9a931a80-c822-42e9-9921-c10362215f69</UserSecretsId>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,15 +11,20 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.27" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.27" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.27" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.27" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.27">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VetRegister.Core\VetRegister.Core.csproj" />
+    <ProjectReference Include="..\VetRegister.Infrastructure\VetRegister.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
+    <Folder Include="Models\" />
+    <Folder Include="Views\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

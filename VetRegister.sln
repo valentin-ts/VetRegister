@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetRegister", "VetRegister\VetRegister.csproj", "{F67AC9E0-5794-4FE1-94A6-4D349C06BD3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetRegister", "VetRegister\VetRegister.csproj", "{F67AC9E0-5794-4FE1-94A6-4D349C06BD3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetRegister.Core", "VetRegister.Core\VetRegister.Core.csproj", "{366D0CDE-7712-4BEF-812C-DA146FDB2E2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetRegister.Infrastructure", "VetRegister.Infrastructure\VetRegister.Infrastructure.csproj", "{B4748956-319F-47FB-ABBD-F1CFA29BBC3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{F67AC9E0-5794-4FE1-94A6-4D349C06BD3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F67AC9E0-5794-4FE1-94A6-4D349C06BD3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F67AC9E0-5794-4FE1-94A6-4D349C06BD3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{366D0CDE-7712-4BEF-812C-DA146FDB2E2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{366D0CDE-7712-4BEF-812C-DA146FDB2E2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{366D0CDE-7712-4BEF-812C-DA146FDB2E2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{366D0CDE-7712-4BEF-812C-DA146FDB2E2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4748956-319F-47FB-ABBD-F1CFA29BBC3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4748956-319F-47FB-ABBD-F1CFA29BBC3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4748956-319F-47FB-ABBD-F1CFA29BBC3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4748956-319F-47FB-ABBD-F1CFA29BBC3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
