@@ -26,7 +26,7 @@ namespace VetRegister.Infrastructure.Data.Models
         public int ClinicId { get; set; }
 
         [ForeignKey(nameof(ClinicId))]
-        public Clinic Clinic { get; set; }
+        public Clinic Clinic { get; set; } = null!;
 
 
         public IEnumerable<Procedure> Procedures { get; set; } = new List<Procedure>();

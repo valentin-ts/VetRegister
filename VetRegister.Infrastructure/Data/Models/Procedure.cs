@@ -24,7 +24,7 @@ namespace VetRegister.Infrastructure.Data.Models
         public int AnimalId { get; set; }
 
         [ForeignKey(nameof(AnimalId))]
-        public Animal Animal { get; set; }
+        public Animal Animal { get; set; } = null!;
 
 
         [Required]
@@ -32,6 +32,6 @@ namespace VetRegister.Infrastructure.Data.Models
         public int DoctorId { get; set; }
 
         [ForeignKey(nameof(DoctorId))]
-        public Doctor Doctor { get; set; }
+        public Doctor Doctor { get; set; } = null!;
     }
 }

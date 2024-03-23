@@ -23,11 +23,11 @@ namespace VetRegister.Infrastructure.Data.Models
 
         [MaxLength(AddressMaxLenght)]
         [Comment("Owner Address")]
-        public string Address { get; set; }
+        public string Address { get; set; } = string.Empty;
 
         [MaxLength(PhoneNumberMaxLength)]
         [Comment("Owner Phone Number")]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
 
         public IEnumerable<Animal> Animals { get; set; } = new List<Animal>();
     }

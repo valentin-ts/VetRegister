@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using VetRegister.Infrastructure.Data.Models;
+using VetRegister.Infrastructure.Data.SeedDb;
 
 namespace VetRegister.Infrastructure.Data
 {
@@ -23,6 +24,30 @@ namespace VetRegister.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            var seedData = new SeedData();
+
+            builder.Entity<Specie>()
+                .HasData(seedData.Dog, seedData.Cat, seedData.Fish, seedData.Bird);
+
+            builder.Entity<IdentityUser>()
+                .HasData(seedData.IdentityUserOwner1, seedData.IdentityUserOwner2, seedData.IdentityUserDoctor1, seedData.IdentityUserDoctor2);
+
+            builder.Entity<Clinic>()
+                .HasData(seedData.Clinic1, seedData.Clinic2);
+
+            builder.Entity<Owner>()
+                .HasData(seedData.Owner1, seedData.Owner2);
+
+            builder.Entity<Doctor>()
+                .HasData(seedData.Doctor1, seedData.Doctor2);
+
+            builder.Entity<Animal>()
+                .HasData(seedData.Animal1, seedData.Animal2, seedData.Animal3, seedData.Animal4);
+
+            builder.Entity<Procedure>()
+                .HasData(seedData.Procedure1, seedData.Procedure2, seedData.Procedure3, seedData.Procedure4);
+
+
             builder.Entity<Animal>()
                 .HasOne(o => o.Owner)
                 .WithMany(a => a.Animals)

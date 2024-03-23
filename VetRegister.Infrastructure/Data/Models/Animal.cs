@@ -26,13 +26,13 @@ namespace VetRegister.Infrastructure.Data.Models
         public int OwnerId { get; set; }
 
         [ForeignKey(nameof(OwnerId))]
-        public Owner Owner { get; set; }
+        public Owner Owner { get; set; } = null!;
 
         [Comment("Specie Identifier")]
         public int SpecieId { get; set; }
 
         [ForeignKey(nameof(SpecieId))]
-        public Specie Specie { get; set; }
+        public Specie Specie { get; set; } = null!;
 
         public IEnumerable<Procedure> Procedures { get; set; } = new List<Procedure>();
     }

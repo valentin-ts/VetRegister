@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VetRegister.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using VetRegister.Infrastructure.Data;
 namespace VetRegister.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240323065500_new")]
+    partial class @new
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,72 +139,6 @@ namespace VetRegister.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "dea12856-c198-4129-b3f3-b893d8395082",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "d2c64f55-182b-4412-9fed-a5b5307ba388",
-                            Email = "owner1@vet.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "owner1@vet.com",
-                            NormalizedUserName = "owner1@vet.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHP54votyqBbrd/Wlg7woUiZYuq2B45CnmurRNY4qDlKt8X8sqDthLrGj09aceMIeA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "a22e7ece-6822-400b-9fb1-d8d70d9e0791",
-                            TwoFactorEnabled = false,
-                            UserName = "owner1@vet.com"
-                        },
-                        new
-                        {
-                            Id = "53ae2865-4a73-4974-ac06-eff5bf01b7f6",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "2437ccb6-85a7-4819-a073-be3b16775d3d",
-                            Email = "owner2@vet.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "owner2@vet.com",
-                            NormalizedUserName = "owner2@vet.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAELiwCpyYaJBe0+pG0Nrzq2AwPd1uzvucewfhFJwwEyg2luIGZ3IV3NHu7ZiXztb4KA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "48cdffb3-9207-4249-9bf8-27cc70e3793d",
-                            TwoFactorEnabled = false,
-                            UserName = "owner2@vet.com"
-                        },
-                        new
-                        {
-                            Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "da038136-f92e-423c-9540-caf91089ad43",
-                            Email = "doctor1@vet.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "doctor1@vet.com",
-                            NormalizedUserName = "doctor1@vet.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJeZq/9/AIqyPwssZdX7fH2Nd69htyiLY+Mt3BBcHrxT8qVKigew81TEVjZ1JP8rGQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "cc0eb712-f763-4828-8073-8278221c0eee",
-                            TwoFactorEnabled = false,
-                            UserName = "doctor1@vet.com"
-                        },
-                        new
-                        {
-                            Id = "9c862997-7dff-4c65-9510-8e0b29e1e877",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "a2e17cbe-d846-4d2c-866d-91a7e75f6a4d",
-                            Email = "doctor2@vet.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "doctor2@vet.com",
-                            NormalizedUserName = "doctor2@vet.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHx3ByXUeC8KbftWzwvh6w+h7kh2Qt00zzQOTF/fvC/qLOwT5nUiP0hOGtXYvlDQNA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "a2e616d5-e8d4-4c53-820d-d68620df5bbb",
-                            TwoFactorEnabled = false,
-                            UserName = "doctor2@vet.com"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -328,44 +264,6 @@ namespace VetRegister.Infrastructure.Migrations
                     b.HasIndex("SpecieId");
 
                     b.ToTable("Animals");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DateOfBirth = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            GenderIsMale = true,
-                            Name = "Dog1",
-                            OwnerId = 1,
-                            SpecieId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DateOfBirth = new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            GenderIsMale = false,
-                            Name = "Cat1",
-                            OwnerId = 1,
-                            SpecieId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DateOfBirth = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            GenderIsMale = false,
-                            Name = "Fish1",
-                            OwnerId = 2,
-                            SpecieId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DateOfBirth = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            GenderIsMale = false,
-                            Name = "Bird1",
-                            OwnerId = 2,
-                            SpecieId = 4
-                        });
                 });
 
             modelBuilder.Entity("VetRegister.Infrastructure.Data.Models.Clinic", b =>
@@ -392,20 +290,6 @@ namespace VetRegister.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Clinics");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Clinic1",
-                            PhoneNumber = "0880000001"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Clinic2",
-                            PhoneNumber = "0880000002"
-                        });
                 });
 
             modelBuilder.Entity("VetRegister.Infrastructure.Data.Models.Doctor", b =>
@@ -433,20 +317,6 @@ namespace VetRegister.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Doctors");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClinicId = 1,
-                            UserId = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ClinicId = 2,
-                            UserId = "9c862997-7dff-4c65-9510-8e0b29e1e877"
-                        });
                 });
 
             modelBuilder.Entity("VetRegister.Infrastructure.Data.Models.Owner", b =>
@@ -480,22 +350,6 @@ namespace VetRegister.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Owners");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "Owner1 Address",
-                            PhoneNumber = "0880000003",
-                            UserId = "dea12856-c198-4129-b3f3-b893d8395082"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "Owner2 Address",
-                            PhoneNumber = "0880000004",
-                            UserId = "53ae2865-4a73-4974-ac06-eff5bf01b7f6"
-                        });
                 });
 
             modelBuilder.Entity("VetRegister.Infrastructure.Data.Models.Procedure", b =>
@@ -531,40 +385,6 @@ namespace VetRegister.Infrastructure.Migrations
                     b.HasIndex("DoctorId");
 
                     b.ToTable("Procedures");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AnimalId = 1,
-                            CreatedOn = new DateTime(2024, 3, 23, 11, 20, 44, 987, DateTimeKind.Local).AddTicks(9756),
-                            Description = "Operation",
-                            DoctorId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AnimalId = 2,
-                            CreatedOn = new DateTime(2024, 3, 23, 11, 20, 44, 987, DateTimeKind.Local).AddTicks(9787),
-                            Description = "Vaccination",
-                            DoctorId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AnimalId = 3,
-                            CreatedOn = new DateTime(2024, 3, 23, 11, 20, 44, 987, DateTimeKind.Local).AddTicks(9789),
-                            Description = "Blood Test",
-                            DoctorId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            AnimalId = 4,
-                            CreatedOn = new DateTime(2024, 3, 23, 11, 20, 44, 987, DateTimeKind.Local).AddTicks(9791),
-                            Description = "Nail Trimming",
-                            DoctorId = 2
-                        });
                 });
 
             modelBuilder.Entity("VetRegister.Infrastructure.Data.Models.Specie", b =>
@@ -585,28 +405,6 @@ namespace VetRegister.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Species");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Dog"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Cat"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Fish"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Bird"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
