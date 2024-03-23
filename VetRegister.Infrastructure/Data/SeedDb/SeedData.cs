@@ -182,14 +182,16 @@ namespace VetRegister.Infrastructure.Data.SeedDb
             {
                 Id = 1,
                 UserId = IdentityUserDoctor1.Id,
-                ClinicId = Clinic1.Id
+                ClinicId = Clinic1.Id,
+                Name = "Doctor 1 Name"
             };
 
             Doctor2 = new Doctor()
             {
                 Id = 2,
                 UserId = IdentityUserDoctor2.Id,
-                ClinicId = Clinic2.Id
+                ClinicId = Clinic2.Id,
+                Name = "Doctor 2 Name"
             };
         }
 

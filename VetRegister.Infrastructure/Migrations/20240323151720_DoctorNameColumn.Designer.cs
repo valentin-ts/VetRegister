@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VetRegister.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using VetRegister.Infrastructure.Data;
 namespace VetRegister.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240323151720_DoctorNameColumn")]
+    partial class DoctorNameColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,15 +145,15 @@ namespace VetRegister.Infrastructure.Migrations
                         {
                             Id = "dea12856-c198-4129-b3f3-b893d8395082",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0dcfb6ed-d59c-4c5d-a0d0-8e0cd4409a53",
+                            ConcurrencyStamp = "7a5aa2db-538b-4153-95e6-a5396899a1dd",
                             Email = "owner1@vet.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "owner1@vet.com",
                             NormalizedUserName = "owner1@vet.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIsAUZ9k29BaUmJH+X7aTtXVzPeYPRZMB4a1lSWR9dxD9wYQMI9WdjHadzja47qLQg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECEdrKLvGZrfi6gjr18bR+SgkY7C3cS1dwEty+nU05CGXyzBihjoMOAbRYSN7b/LCQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f0b75736-cfa0-4381-945d-81f863cc4380",
+                            SecurityStamp = "c25a0ea6-7101-4097-818c-42917a5b4c49",
                             TwoFactorEnabled = false,
                             UserName = "owner1@vet.com"
                         },
@@ -159,15 +161,15 @@ namespace VetRegister.Infrastructure.Migrations
                         {
                             Id = "53ae2865-4a73-4974-ac06-eff5bf01b7f6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "35039c1e-f5b5-448b-b464-43cd1c4ef58b",
+                            ConcurrencyStamp = "ec56dd71-5c18-4e77-bd06-2ab892dd1890",
                             Email = "owner2@vet.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "owner2@vet.com",
                             NormalizedUserName = "owner2@vet.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA4CK4V8Nm+bE4qPjm6s2BHRkkxRMUayqnvhikkfJZ53+GiooyhlDT1t7+5Cmjd8Vw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEL2etau1/WluR7n2F0qEo31aL+8j1gQtC3AoI+zHJWqRwqbAilqPtU7uaqVf8VTZNg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d9cac6eb-e441-43c4-bab2-420e587e8775",
+                            SecurityStamp = "16096588-a430-4e84-8c3f-12a2652edca5",
                             TwoFactorEnabled = false,
                             UserName = "owner2@vet.com"
                         },
@@ -175,15 +177,15 @@ namespace VetRegister.Infrastructure.Migrations
                         {
                             Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a8ae8450-9d45-41fc-b440-e30cf6627a56",
+                            ConcurrencyStamp = "0a0140d8-aaa2-4848-ae99-cab1f77224c5",
                             Email = "doctor1@vet.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "doctor1@vet.com",
                             NormalizedUserName = "doctor1@vet.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBYNahSnfiS2lMM4lrbw5RwXULFuVt20/uPm6qP6sVpiDJN19aQbF6PYdG9WNYrleg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECI38CTw/G8K6jEtfPqGXW3weUc3y0E3eam4VHdPLT+imOMswxsPTLINqsswUkGWeA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f2623f00-4eb5-46c1-bf4c-3e42e064fd45",
+                            SecurityStamp = "d9b0bfba-ffc0-460b-971f-968a4a47b169",
                             TwoFactorEnabled = false,
                             UserName = "doctor1@vet.com"
                         },
@@ -191,15 +193,15 @@ namespace VetRegister.Infrastructure.Migrations
                         {
                             Id = "9c862997-7dff-4c65-9510-8e0b29e1e877",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6086046e-4418-4237-9588-95483a39e08b",
+                            ConcurrencyStamp = "22ba42d5-4108-44a0-83a0-6bbfb07467f7",
                             Email = "doctor2@vet.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "doctor2@vet.com",
                             NormalizedUserName = "doctor2@vet.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAENkKoKg1Z6tI3p0MnO9ZabaUH6EbQaRoGrX4cNLyvyqL+f9+sOVGK3u2scy6lcd+aQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGReYsRQY6WSzTYcxRMPzljvBZkomLcYq/MIJM/8+DOyWWjJc7OVXTWAlz+N2Iz1Gw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5aa6ee22-e1e3-40bb-bbaa-a802e97b6d39",
+                            SecurityStamp = "5a2e4822-c501-4dff-b307-a74312935fc7",
                             TwoFactorEnabled = false,
                             UserName = "doctor2@vet.com"
                         });
@@ -445,14 +447,14 @@ namespace VetRegister.Infrastructure.Migrations
                         {
                             Id = 1,
                             ClinicId = 1,
-                            Name = "Doctor 1 Name",
+                            Name = "",
                             UserId = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e"
                         },
                         new
                         {
                             Id = 2,
                             ClinicId = 2,
-                            Name = "Doctor 2 Name",
+                            Name = "",
                             UserId = "9c862997-7dff-4c65-9510-8e0b29e1e877"
                         });
                 });
@@ -545,7 +547,7 @@ namespace VetRegister.Infrastructure.Migrations
                         {
                             Id = 1,
                             AnimalId = 1,
-                            CreatedOn = new DateTime(2024, 3, 23, 17, 20, 4, 533, DateTimeKind.Local).AddTicks(3178),
+                            CreatedOn = new DateTime(2024, 3, 23, 17, 17, 19, 802, DateTimeKind.Local).AddTicks(5437),
                             Description = "Operation",
                             DoctorId = 1
                         },
@@ -553,7 +555,7 @@ namespace VetRegister.Infrastructure.Migrations
                         {
                             Id = 2,
                             AnimalId = 2,
-                            CreatedOn = new DateTime(2024, 3, 23, 17, 20, 4, 533, DateTimeKind.Local).AddTicks(3208),
+                            CreatedOn = new DateTime(2024, 3, 23, 17, 17, 19, 802, DateTimeKind.Local).AddTicks(5468),
                             Description = "Vaccination",
                             DoctorId = 1
                         },
@@ -561,7 +563,7 @@ namespace VetRegister.Infrastructure.Migrations
                         {
                             Id = 3,
                             AnimalId = 3,
-                            CreatedOn = new DateTime(2024, 3, 23, 17, 20, 4, 533, DateTimeKind.Local).AddTicks(3211),
+                            CreatedOn = new DateTime(2024, 3, 23, 17, 17, 19, 802, DateTimeKind.Local).AddTicks(5471),
                             Description = "Blood Test",
                             DoctorId = 2
                         },
@@ -569,7 +571,7 @@ namespace VetRegister.Infrastructure.Migrations
                         {
                             Id = 4,
                             AnimalId = 4,
-                            CreatedOn = new DateTime(2024, 3, 23, 17, 20, 4, 533, DateTimeKind.Local).AddTicks(3213),
+                            CreatedOn = new DateTime(2024, 3, 23, 17, 17, 19, 802, DateTimeKind.Local).AddTicks(5472),
                             Description = "Nail Trimming",
                             DoctorId = 2
                         });

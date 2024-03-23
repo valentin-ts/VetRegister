@@ -8,9 +8,9 @@ namespace VetRegister.Infrastructure.Constants
 {
     public static class DataConstants
     {
-        public const int AnimalNameMaxLenght = 50;
+        public const int NameMaxLenght = 50;
 
-        public const int AnimalNameMinLength = 2;
+        public const int NameMinLength = 2;
 
         public const int ClinicNameMaxLenght = 50;
 

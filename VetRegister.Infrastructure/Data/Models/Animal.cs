@@ -12,7 +12,7 @@ namespace VetRegister.Infrastructure.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(AnimalNameMaxLenght)]
+        [MaxLength(NameMaxLenght)]
         [Comment("Animal Name")]
         public string Name { get; set; } = string.Empty;
 

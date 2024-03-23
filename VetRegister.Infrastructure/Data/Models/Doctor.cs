@@ -12,6 +12,11 @@ namespace VetRegister.Infrastructure.Data.Models
         [Comment("Doctor Identifier")]
         public int Id { get; set; }
 
+        [Required]
+        [MaxLength(NameMaxLenght)]
+        [Comment("Doctor Name")]
+        public string Name { get; set; } = String.Empty;
+
 
         [Required]
         [Comment("Identity User Identifier")]

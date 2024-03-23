@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using VetRegister.Core.Contracts;
+using VetRegister.Core.Services;
 using VetRegister.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 
 builder.Services.AddControllersWithViews();
 //Add additional application services here
+
+builder.Services.AddScoped<IClinicService, ClinicService>();
 
 var app = builder.Build();
 
