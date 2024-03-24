@@ -13,7 +13,7 @@ namespace VetRegister.Core.Contracts
 
         public Clinic GetClinicByIdIncludeDoctors(int id);
 
-        public void Edit(Clinic currentClinic, ClinicFormModel modelClinic);
+        public void Edit(int id, ClinicFormModel modelClinic);
 
         public bool ClinicHasDoctors(int id);
 

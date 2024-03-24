@@ -64,11 +64,7 @@ namespace VetRegister.Controllers
         [HttpPost]
         public IActionResult Edit(int id, ClinicFormModel modelClinic)
         {
-            //DO A USERID CHECK !!!!!!!!!!!! if he is authorised
-            //var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            var currentClinic = clinicService.GetClinicById(id);
-            clinicService.Edit(currentClinic, modelClinic);
+            clinicService.Edit(id, modelClinic);
 
             return RedirectToAction(nameof(All));
         }

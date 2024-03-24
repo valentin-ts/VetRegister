@@ -49,8 +49,9 @@ namespace VetRegister.Core.Services
             this.data.SaveChanges();
         }
 
-        public void Edit(Clinic currentClinic, ClinicFormModel modelClinic)
+        public void Edit(int id, ClinicFormModel modelClinic)
         {
+            var currentClinic = GetClinicById(id);
             currentClinic.Name = modelClinic.Name;
             currentClinic.PhoneNumber = modelClinic.PhoneNumber;
 

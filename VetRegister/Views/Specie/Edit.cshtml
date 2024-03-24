@@ -1,0 +1,16 @@
+﻿
+@model SpecieFormModel
+
+@{
+    ViewData["Title"] = "Edit Specie";
+}
+
+<form method="post">
+    <br>
+    <div class="form-group">
+        <label class="text-body">Edit specie:</label>
+        <input asp-for="NewSpecieName" class="form-control" placeholder="Give me new specie">
+        <span asp-validation-for="NewSpecieName" class="small text-danger"></span>
+    </div>
+    <input class="btn btn-primary float-right" type="submit" value="Save" />
+</form>

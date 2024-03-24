@@ -1,0 +1,45 @@
+﻿
+@model SpecieFormModel 
+
+@{ 
+    ViewData["Title"] = "All Species";
+}
+
+<form method="post">
+    <br>
+    <label class="text-body">Existing species:</label>
+    <br>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <label>Specie Name</label>
+                </th>
+                <th scope="col">
+                    <label>Specie Modify</label>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var specie in Model.AllSpeciesList)
+            {
+                <tr>
+                    <td>@specie.Name</td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Specie" asp-action="Edit" asp-route-id="@specie.Id">Edit</a>
+                        <a class="btn btn-primary" asp-controller="Specie" asp-action="Delete" asp-route-id="@specie.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br>
+
+    <div class="form-group">
+        <label class="text-body">Add new specie:</label>
+        <input asp-for="NewSpecieName" class="form-control" placeholder="Give me new specie">
+        <span asp-validation-for="NewSpecieName" class="small text-danger"></span>
+    </div>
+    <input class="btn btn-primary float-right" type="submit" value="Save" />
+
+</form>

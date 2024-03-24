@@ -29,6 +29,11 @@ builder.Services.AddControllersWithViews();
 //Add additional application services here
 
 builder.Services.AddScoped<IClinicService, ClinicService>();
+builder.Services.AddScoped<ISpecieService, SpecieService>();
+builder.Services.AddScoped<IAnimalService, AnimalService>();
+builder.Services.AddScoped<IProcedureService, ProcedureService>();
+builder.Services.AddScoped<IOwnerService, OwnerService>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
 
 var app = builder.Build();
 

@@ -1,0 +1,28 @@
+﻿@model AnimalFormModel
+
+@{
+    ViewData["Title"] = "Edit Animal";
+}
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" placeholder="Give me a name">
+        <span asp-validation-for="Name" class="small text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DateOfBirth"></label>
+        <input asp-for="DateOfBirth" class="form-control" placeholder="Give me a birth date">
+        <span asp-validation-for="DateOfBirth" class="small text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SpecieId">Example select</label>
+        <select asp-for="SpecieId" class="form-control">
+            @foreach (var specie in Model.Species)
+            {
+                <option value="@specie.Id">@specie.Name</option>
+            }
+        </select>
+    </div>
+    <input class="btn btn-primary float-right" type="submit" value="Save" />
+</form>

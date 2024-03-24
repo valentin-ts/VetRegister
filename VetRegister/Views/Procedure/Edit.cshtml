@@ -1,0 +1,26 @@
+﻿@* 
+@model ProcedureFormModel
+
+@{
+    ViewData["Title"] = "Edit Procedure";
+}
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="ProcedureId">Procedure:</label>
+        <select asp-for="ProcedureId" class="form-control">
+            <option value="">Choose a procedure...</option>
+            @foreach (var procedure in Model.Procedures)
+            {
+                <option value="@procedure.Id">@procedure.Name</option>
+            }
+        </select>
+        <span asp-validation-for="ProcedureId" class="small text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control" placeholder="Text"></textarea>
+        <span asp-validation-for="Description" class="small text-danger"></span>
+    </div>
+    <input class="btn btn-primary float-right" type="submit" value="Save"/>
+</form> *@
