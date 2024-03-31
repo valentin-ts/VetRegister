@@ -6,6 +6,7 @@ namespace VetRegister.Core.Models.Animal
     public class AnimalViewModel
     {
         public int Id { get; set; }
+
         public string Name { get; init; } = string.Empty;
 
         public string DateOfBirth { get; init; } = string.Empty;

@@ -1,0 +1,40 @@
+﻿@model OwnerDetailsViewModel
+
+@{
+    ViewData["Title"] = "Owner Details";
+}
+
+<form method="get">
+
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <label>Animal Name</label>
+                </th>
+                <th scope="col">
+                    <label>Animal Specie</label>
+                </th>
+                <th scope="col">
+                    <label>Animal Date Of Birth</label>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var animal in Model.Animals)
+            {
+                <tr>
+                    <td>@animal.Name</td>
+                    <td>@animal.SpecieName</td>
+                    <td>@animal.DateOfBirth</td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Animal" asp-action="Details" asp-route-id="@animal.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+
+

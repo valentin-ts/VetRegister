@@ -1,43 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VetRegister.Core.Contracts;
 using VetRegister.Core.Models.Specie;
-using VetRegister.Infrastructure.Data;
 using VetRegister.Infrastructure.Data.Models;
 
 namespace VetRegister.Controllers
 {
     public class SpecieController : Controller
     {
-        private readonly ApplicationDbContext data;
         private readonly ISpecieService specieService;
 
-        public SpecieController(ApplicationDbContext data, ISpecieService specieService)
+        public SpecieController(ISpecieService specieService)
         {
-            this.data = data;
             this.specieService = specieService;
         }
 
-        //[Authorize]
+
         public IActionResult All()
         {
             return View(new SpecieFormModel
             {
-                AllSpeciesList = specieService.GetAllAnimalSpecies()
+                AllSpeciesList = specieService.GetAll()
             });
         }
 
         [HttpPost]
         public IActionResult All(SpecieFormModel modelSpecie)
         {
-            if (this.data.Species.Any(b => b.Name == modelSpecie.NewSpecieName))
+            if (specieService.NameExists(modelSpecie.NewSpecieName))
             {
                 this.ModelState.AddModelError(nameof(Specie.Id), "Specie already exists.");
-                //return RedirectToAction("Exists", "Specie");  //Make a controller for this
             }
 
             if (!ModelState.IsValid)
             {
-                modelSpecie.AllSpeciesList = specieService.GetAllAnimalSpecies();
+                modelSpecie.AllSpeciesList = specieService.GetAll();
                 return View(modelSpecie);
             }
 
@@ -49,22 +45,24 @@ namespace VetRegister.Controllers
 
         public IActionResult Delete(int id)
         {
-            if (!specieService.SpecieIdExists(id))
+            if (!specieService.IdExists(id))
             {
                 return BadRequest();
             }
+
             specieService.Delete(id);
+
             return RedirectToAction("All");
         }
 
         public IActionResult Edit(int id)
         {
-            if (!specieService.SpecieIdExists(id))
+            if (!specieService.IdExists(id))
             {
                 return BadRequest();
             }
 
-            var currentSpecie = this.data.Species.Find(id);
+            var currentSpecie = specieService.FindById(id);
             return View(new SpecieFormModel
             {
                 NewSpecieName = currentSpecie.Name

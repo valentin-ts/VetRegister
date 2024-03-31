@@ -14,20 +14,38 @@
         <a for="Age" class="col-sm-10 col-form-label">@Model.PhoneNumber</a>
     </div>
     <br>
-    <div>
+
+    @if (Model.Doctors.Count() > 0)
+    {
+        <div>
+            <br>
+            <label class="text-body">Cannot delete clinic "@Model.Name". The following doctors are working there:</label>
+            <br>
+            <ul class="list-group">
+                @foreach (var doctor in Model.Doctors)
+                {
+                    <li class="list-group-item">@doctor</li>
+                }
+            </ul>
+        </div>
         <br>
-        <label class="text-body">Doctors working here:</label>
+        <div>
+            <a class="btn btn-primary" asp-controller="Clinic" asp-action="All">Back to All Clinics</a>
+            <a class="btn btn-primary" asp-controller="Clinic" asp-action="Edit" asp-route-id="@Model.Id">Edit this clinic</a>
+        </div>
+    }
+    else
+    {
+        <div>
+            <br>
+            <label class="text-body"> No doctors are working in clinic "@Model.Name". You can delete it.</label>
+        </div>
         <br>
-        <ul class="list-group">
-            @foreach (var doctor in Model.Doctors)
-            {
-                <li class="list-group-item">@doctor</li>
-            }
-        </ul>
-    </div>
-    <br>
-    <div>
-        <a class="btn btn-primary" asp-controller="Clinic" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-        <a class="btn btn-primary" asp-controller="Clinic" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-    </div>
+        <div>
+            <a class="btn btn-primary" asp-controller="Clinic" asp-action="All" asp-route-id="@Model.Id">Back to All Clinics</a>
+            <a class="btn btn-primary" asp-controller="Clinic" asp-action="Edit" asp-route-id="@Model.Id">Edit this clinic</a>
+            <a class="btn btn-primary" asp-controller="Clinic" asp-action="Delete" asp-route-id="@Model.Id">Delete this clinic</a>
+        </div>
+    }
+
 </form>

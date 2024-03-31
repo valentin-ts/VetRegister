@@ -33,12 +33,12 @@ namespace VetRegister.Core.Services
             data.SaveChanges();
         }
 
-        public bool ClinicHasDoctors(int id)
+        public bool HasAnyDoctors(int id)
         {
             return this.data.Doctors.Any(d => d.ClinicId == id);
         }
 
-        public bool ClinicNameTaken(string name)
+        public bool NameTaken(string name)
         {
             return this.data.Clinics.Any(c => c.Name == name);
         }
@@ -51,7 +51,7 @@ namespace VetRegister.Core.Services
 
         public void Edit(int id, ClinicFormModel modelClinic)
         {
-            var currentClinic = GetClinicById(id);
+            var currentClinic = GetById(id);
             currentClinic.Name = modelClinic.Name;
             currentClinic.PhoneNumber = modelClinic.PhoneNumber;
 
@@ -71,12 +71,12 @@ namespace VetRegister.Core.Services
             .ToList();
         }
 
-        public Clinic GetClinicById(int id)
+        public Clinic GetById(int id)
         {
             return this.data.Clinics.Find(id);
         }
 
-        public Clinic GetClinicByIdIncludeDoctors(int id)
+        public Clinic GetByIdIncludeDoctors(int id)
         {
             return this.data
                 .Clinics

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<OwnerViewModel>
+
+@{
+    ViewData["Title"] = "All Owners";
+}
+
+<form>
+    <br>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <label>Owner Name</label>
+                </th>
+                <th scope="col">
+                    <label>Animals Count</label>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var owner in Model)
+            {
+                <tr>
+                    <td>@owner.Name</td>
+                    <td>@owner.AnimalsCount</td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Owner" asp-action="Details" asp-route-id="@owner.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>

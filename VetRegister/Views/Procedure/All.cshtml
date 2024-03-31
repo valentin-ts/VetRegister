@@ -22,9 +22,6 @@
                 <th scope="col">
                     <label>Animal</label>
                 </th>
-                <th scope="col">
-                    <label>Details</label>
-                </th>
             </tr>
         </thead>
         <tbody>
@@ -35,15 +32,9 @@
                 <td>@procedure.Description</td>
                 <td>@procedure.DoctorName</td>
                 <td>@procedure.AnimalName</td>
-                <td>
-                    <a class="btn btn-primary" asp-controller="Procedure" asp-action="Details" asp-route-id="@procedure.Id">Details</a>
-                </td>
             </tr>
             }
         </tbody>
     </table>
     <br>
-    @*<div class="col-md-12 text-center">
-        <a class="btn btn-primary" asp-area="" asp-controller="Clinics" asp-action="Add">Add New Procedure</a>
-    </div> *@
 </form>

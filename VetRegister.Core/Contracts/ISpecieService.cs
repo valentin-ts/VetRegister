@@ -1,19 +1,24 @@
 ﻿using VetRegister.Core.Models.Specie;
+using VetRegister.Infrastructure.Data.Models;
 
 namespace VetRegister.Core.Contracts
 {
     public interface ISpecieService
     {
-        public bool SpecieIdExists(int specieId);
+        public bool IdExists(int specieId);
 
-        public string GetSpecieName(int specieId);
+        public bool NameExists(string specieName);
 
-        public IEnumerable<SpecieViewModel> GetAllAnimalSpecies();
+        public string GetName(int specieId);
 
-        public void Add(string specieName);
+        public IEnumerable<SpecieViewModel> GetAll();
 
-        public void Delete(int Id);
+        public void Add(string NewSpecieName);
 
-        public void Edit(int Id, SpecieFormModel modelSpecie);
+        public void Delete(int id);
+
+        public void Edit(int id, SpecieFormModel modelSpecie);
+
+        public Specie FindById(int id);
     }
 }

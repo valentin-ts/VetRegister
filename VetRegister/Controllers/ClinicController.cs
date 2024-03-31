@@ -23,7 +23,7 @@ namespace VetRegister.Controllers
         public IActionResult Add(ClinicFormModel clinic)
         {
             ViewBag.ClinicNameExists = false;
-            if (clinicService.ClinicNameTaken(clinic.Name))
+            if (clinicService.NameTaken(clinic.Name))
             {
                 ViewBag.ClinicNameExists = true;
                 return View(clinic);
@@ -39,13 +39,9 @@ namespace VetRegister.Controllers
             return RedirectToAction("All");
         }
 
-        //[Authorize]
         public IActionResult Edit(int id)
         {
-            //DO A USERID CHECK !!!!!!!!!!!! if he is authorised
-            //var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            var currentClinic = clinicService.GetClinicById(id);
+            var currentClinic = clinicService.GetById(id);
 
             if (currentClinic == null)
             {
@@ -71,18 +67,16 @@ namespace VetRegister.Controllers
 
         public IActionResult Delete(int id)
         {
-            var currentClinic = clinicService.GetClinicById(id);
-
+            var currentClinic = clinicService.GetById(id);
+            
             if (currentClinic == null)
             {
                 return BadRequest();
             }
 
-            if (clinicService.ClinicHasDoctors(currentClinic.Id))
+            if (clinicService.HasAnyDoctors(currentClinic.Id))
             {
-                return RedirectToAction("All");
-                //Cannot Erase, full of doctors
-                //return StatusCode(418);
+                return BadRequest();
             }
 
             clinicService.Delete(currentClinic);
@@ -92,8 +86,8 @@ namespace VetRegister.Controllers
 
         public IActionResult Details(int id)
         {
-            //Is include doctors really needed??? !!!!!!!!!!!!!!
-            var currentClinic = clinicService.GetClinicByIdIncludeDoctors(id);
+            //var currentClinic = clinicService.GetByIdIncludeDoctors(id);
+            var currentClinic = clinicService.GetById(id);
 
             if (currentClinic == null)
             {
@@ -106,10 +100,10 @@ namespace VetRegister.Controllers
                 Name = currentClinic.Name,
                 PhoneNumber = currentClinic.PhoneNumber,
                 Doctors = clinicService.GetDoctorsForClinic(id)
-            });
+                //Doctors = currentClinic.Doctors.Select(x =>  x.Name).ToList()
+            });;
         }
 
-        //[Authorize]
         public IActionResult All()
         {
             return View(clinicService.GetAllClinics());

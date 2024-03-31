@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using VetRegister.Core.Contracts;
+using VetRegister.Core.Models.Doctor;
+using VetRegister.Core.Models.Procedure;
 using VetRegister.Infrastructure.Data;
 
 namespace VetRegister.Core.Services
@@ -17,9 +15,68 @@ namespace VetRegister.Core.Services
             this.data = data;
         }
 
+        public IEnumerable<DoctorViewModel> GetAllDoctors()
+        {
+            return this.data
+                .Doctors
+                .Include(d => d.Clinic)
+                .Select(d => new DoctorViewModel
+                {
+                    Id = d.Id,
+                    Name = d.Name,
+                    ClinicName = d.Clinic.Name,
+                    ProceduresCount = d.Procedures.Count()
+                })
+                .ToList();
+        }
+
+
+        public DoctorDetailsViewModel GetDoctorDetails(int id)
+        {
+                var procedures = this.data
+                .Procedures
+                .Where(p => p.Doctor.Id == id)
+                .Select(p => new ProcedureViewModel
+                {
+                    Id = p.Id,
+                    AnimalName = p.Animal.Name,
+                    Description = p.Description,
+                    CreatedOn = p.CreatedOn.ToString("d"),
+                    //DoctorName = p.Doctor.Name
+                })
+            .ToList();
+
+            return new DoctorDetailsViewModel
+            {
+                Id = id,
+                Name = this.data.Doctors.FirstOrDefault(d => d.Id == id).Name,
+                ClinicName = this.data.Doctors.Include(d => d.Clinic).FirstOrDefault(d => d.Id == id).Clinic.Name,
+                Procedures = procedures
+            };
+        }
+
+
+        public DoctorViewModel GetById(int id)
+        {
+            return this.data
+                .Doctors
+                .Include(d => d.Procedures)
+                .Where(d => d.Id == id)
+                .Select(d => new DoctorViewModel
+                {
+                    Id = d.Id,
+                    Name = d.Name,
+                    ClinicName = d.Clinic.Name,
+                    ProceduresCount = d.Procedures.Count(),
+                    //Procedures = d.Procedures.Select( p => p.Description)
+                }).FirstOrDefault();
+        }
+
         public int GetDoctorId(string userId)
         {
-            return data.Doctors.FirstOrDefault(o => o.UserId == userId).Id;
+            return this.data
+                .Doctors
+                .FirstOrDefault(d => d.UserId == userId).Id;
         }
     }
 }

@@ -19,21 +19,28 @@ namespace VetRegister.Core.Services
             this.data = data;
         }
 
-        public bool SpecieIdExists(int specieId)
+        public bool IdExists(int specieId)
         {
             return this.data
                 .Species
                 .Any(b => b.Id == specieId);
         }
 
-        public string GetSpecieName(int specieId)
+        public bool NameExists(string specieName)
+        {
+            return this.data
+                .Species
+                .Any(b => b.Name == specieName);
+        }
+
+        public string GetName(int specieId)
         {
             return this.data
                 .Species
                 .FirstOrDefault(b => b.Id == specieId).Name;
         }
 
-        public IEnumerable<SpecieViewModel> GetAllAnimalSpecies()
+        public IEnumerable<SpecieViewModel> GetAll()
         {
             return this.data
                 .Species
@@ -68,6 +75,11 @@ namespace VetRegister.Core.Services
             var currentSpecie = this.data.Species.Find(id);
             currentSpecie.Name = modelSpecie.NewSpecieName;
             this.data.SaveChanges();
+        }
+
+        public Specie? FindById(int id)
+        {
+            return this.data.Species.Find(id);
         }
     }
 }

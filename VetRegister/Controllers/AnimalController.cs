@@ -45,7 +45,7 @@ namespace VetRegister.Controllers
                 return View(modelAnimal);
             }
 
-            if (!specieService.SpecieIdExists(modelAnimal.SpecieId))
+            if (!specieService.IdExists(modelAnimal.SpecieId))
             {
                 return BadRequest();
             }
@@ -126,7 +126,7 @@ namespace VetRegister.Controllers
                 DateOfBirth = currentAnimal.DateOfBirth.ToString("d"),
                 Age = (DateTime.UtcNow.Year - currentAnimal.DateOfBirth.Year).ToString(),
                 SpecieId = currentAnimal.SpecieId,
-                SpecieName = specieService.GetSpecieName(currentAnimal.SpecieId),
+                SpecieName = specieService.GetName(currentAnimal.SpecieId),
                 Procedures = animalService.GetAnimalProcedures(currentAnimal.Id)
             });
         }
