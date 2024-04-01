@@ -18,6 +18,7 @@ namespace VetRegister.Core.Contracts
         public bool HasAnyDoctors(int id);
 
         public void Delete(Clinic currentClinic);
+
         public IEnumerable<ClinicViewModel> GetAllClinics();
 
         public IEnumerable<string> GetDoctorsForClinic(int clinicId);

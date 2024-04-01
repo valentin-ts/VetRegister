@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VetRegister.Core.Models.Doctor;
 using VetRegister.Core.Models.Procedure;
+using VetRegister.Infrastructure.Data.Models;
 
 namespace VetRegister.Core.Contracts
 {
@@ -17,5 +18,7 @@ namespace VetRegister.Core.Contracts
         public IEnumerable<DoctorViewModel> GetAllDoctors();
 
         public DoctorDetailsViewModel GetDoctorDetails(int id);
+
+        public void CreateDoctor(Doctor newDoctor);
     }
 }

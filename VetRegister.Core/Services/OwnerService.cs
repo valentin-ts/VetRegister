@@ -4,6 +4,7 @@ using VetRegister.Core.Models.Animal;
 using VetRegister.Core.Models.Owner;
 using VetRegister.Core.Models.Procedure;
 using VetRegister.Infrastructure.Data;
+using VetRegister.Infrastructure.Data.Models;
 
 namespace VetRegister.Core.Services
 {
@@ -57,6 +58,12 @@ namespace VetRegister.Core.Services
         public int GetOwnerId(string userId)
         {
             return data.Owners.FirstOrDefault(o => o.UserId == userId).Id;
+        }
+
+        public void CreateOwner(Owner newOwner)
+        {
+            this.data.Owners.Add(newOwner);
+            this.data.SaveChanges();
         }
     }
 }

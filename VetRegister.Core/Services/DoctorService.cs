@@ -3,6 +3,7 @@ using VetRegister.Core.Contracts;
 using VetRegister.Core.Models.Doctor;
 using VetRegister.Core.Models.Procedure;
 using VetRegister.Infrastructure.Data;
+using VetRegister.Infrastructure.Data.Models;
 
 namespace VetRegister.Core.Services
 {
@@ -29,7 +30,6 @@ namespace VetRegister.Core.Services
                 })
                 .ToList();
         }
-
 
         public DoctorDetailsViewModel GetDoctorDetails(int id)
         {
@@ -77,6 +77,12 @@ namespace VetRegister.Core.Services
             return this.data
                 .Doctors
                 .FirstOrDefault(d => d.UserId == userId).Id;
+        }
+
+        public void CreateDoctor(Doctor newDoctor)
+        {
+            this.data.Doctors.Add(newDoctor);
+            this.data.SaveChanges();
         }
     }
 }

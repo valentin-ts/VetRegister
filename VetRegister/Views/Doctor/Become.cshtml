@@ -1,0 +1,23 @@
+﻿@model BecomeDoctorFormModel
+
+@{
+    ViewData["Title"] = "Become Doctor";
+}
+
+<form method="post">
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" placeholder="Doctor Full Name">
+    </div>
+    <div class="form-group">
+        <label asp-for="ClinicId"></label>
+        <select asp-for="ClinicId" class="form-control">
+            @foreach (var clinic in Model.Clinics)
+            {
+                <option value="@clinic.Id">@clinic.Name</option>
+            }
+        </select>
+    </div>
+    <input class="btn btn-primary float-right" type="submit" value="Save" />
+</form>
