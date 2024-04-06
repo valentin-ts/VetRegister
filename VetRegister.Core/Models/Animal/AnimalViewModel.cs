@@ -1,4 +1,5 @@
-﻿using VetRegister.Core.Models.Procedure;
+﻿using System.ComponentModel.DataAnnotations;
+using VetRegister.Core.Models.Procedure;
 
 
 namespace VetRegister.Core.Models.Animal
@@ -9,6 +10,7 @@ namespace VetRegister.Core.Models.Animal
 
         public string Name { get; init; } = string.Empty;
 
+        [Display(Name = "Date Of Birth")]
         public string DateOfBirth { get; init; } = string.Empty;
 
         public string Age { get; set; } = string.Empty;

@@ -1,4 +1,6 @@
-﻿namespace VetRegister.Core.Models.Doctor
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace VetRegister.Core.Models.Doctor
 {
     public class DoctorViewModel
     {
@@ -6,7 +8,8 @@
 
         public string Name { get; set; } = string.Empty;
 
-        public string ClinicName { get; set; }
+        [Display(Name = "Clinic Name")]
+        public string ClinicName { get; set; } = string.Empty;
 
         public int ProceduresCount { get; set; }
      }

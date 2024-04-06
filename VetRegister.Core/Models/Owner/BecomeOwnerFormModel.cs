@@ -1,13 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static VetRegister.Infrastructure.Constants.MessageConstants;
+using static VetRegister.Infrastructure.Constants.DataConstants;
 
 namespace VetRegister.Core.Models.Owner
 {
     public class BecomeOwnerFormModel
     {
-        [MaxLength(20)]
-        public string Address { get; set; }
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(NameMaxLenght, MinimumLength = NameMinLength, ErrorMessage = LengthMessage)]
+        public string Address { get; set; } = string.Empty;
 
-        [MaxLength(20)]
-        public string PhoneNumber { get; set; }
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(NameMaxLenght, MinimumLength = NameMinLength, ErrorMessage = LengthMessage)]
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; } = string.Empty;
     }
 }

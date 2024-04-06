@@ -2,7 +2,6 @@
 using VetRegister.Core.Contracts;
 using VetRegister.Core.Models.Animal;
 using VetRegister.Core.Models.Owner;
-using VetRegister.Core.Models.Procedure;
 using VetRegister.Infrastructure.Data;
 using VetRegister.Infrastructure.Data.Models;
 

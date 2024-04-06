@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using VetRegister.Core.Contracts;
-using VetRegister.Core.Services;
-using VetRegister.Infrastructure.Data.Models;
 using VetRegister.Core.Models.Owner;
+using VetRegister.Infrastructure.Data.Models;
 
 namespace VetRegister.Controllers
 {

@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using static VetRegister.Infrastructure.Constants.DataConstants;
+using static VetRegister.Infrastructure.Constants.MessageConstants;
 
 namespace VetRegister.Core.Models.Animal
 {
     public class AnimalFormModel
     {
-        [Required]
-        [StringLength(20, MinimumLength = 2)]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(NameMaxLenght, MinimumLength = NameMinLength, ErrorMessage = LengthMessage)]
+
         public string Name { get; init; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
+        [Display(Name = "Date Of Birth")]
         public string DateOfBirth{ get; init; } = string.Empty;
 
         [Required]

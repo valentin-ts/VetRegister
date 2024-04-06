@@ -1,15 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static VetRegister.Infrastructure.Constants.MessageConstants;
+using static VetRegister.Infrastructure.Constants.DataConstants;
 
 namespace VetRegister.Core.Models.Clinic
 {
     public class ClinicFormModel
     {
-        [Required]
-        [MaxLength(20)]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(NameMaxLenght, MinimumLength = NameMinLength, ErrorMessage = LengthMessage)]
         public string Name { get; set; } = String.Empty;
 
-        [Required]
-        [MaxLength(20)]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(NameMaxLenght, MinimumLength = NameMinLength, ErrorMessage = LengthMessage)]
+        [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; } = String.Empty;
     }
 }

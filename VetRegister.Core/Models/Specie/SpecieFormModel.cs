@@ -1,16 +1,13 @@
-﻿//using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using static VetRegister.Infrastructure.Constants.MessageConstants;
+using static VetRegister.Infrastructure.Constants.DataConstants;
 
 namespace VetRegister.Core.Models.Specie
 {
     public class SpecieFormModel
     {
-        [Required]
-        [MaxLength(20)]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(NameMaxLenght, MinimumLength = NameMinLength, ErrorMessage = LengthMessage)]
         public string NewSpecieName { get; set; } = string.Empty;
 
         public IEnumerable<SpecieViewModel> AllSpeciesList { get; set; } = new List<SpecieViewModel>();
