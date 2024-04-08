@@ -54,9 +54,9 @@ namespace VetRegister.Core.Services
             };
         }
 
-        public int GetOwnerId(string userId)
+        public int? GetOwnerId(string? userId)
         {
-            return data.Owners.FirstOrDefault(o => o.UserId == userId).Id;
+            return this.data.Owners.FirstOrDefault(o => o.UserId == userId)?.Id;
         }
 
         public void CreateOwner(Owner newOwner)

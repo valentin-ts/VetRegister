@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using VetRegister.Core.Contracts;
 using VetRegister.Core.Models.Animal;
@@ -25,7 +26,7 @@ namespace VetRegister.Controllers
         {
             return View(new AnimalFormModel
             {
-                Species = this.animalService.GetAnimalSpecies()
+                Species = animalService.GetAnimalSpecies()
             });
         }
 
@@ -34,14 +35,14 @@ namespace VetRegister.Controllers
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            //if (userId == null)
-            //{
-            //    return BadRequest();
-            //}
+            if (userId == null)
+            {
+                return BadRequest();
+            }
 
             if (!ModelState.IsValid)
             {
-                modelAnimal.Species = this.animalService.GetAnimalSpecies();
+                modelAnimal.Species = animalService.GetAnimalSpecies();
                 return View(modelAnimal);
             }
 
@@ -55,12 +56,22 @@ namespace VetRegister.Controllers
             return RedirectToAction("All");
         }
 
+
         public IActionResult Edit(int id)
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            //var ownerId = ownerService.GetOwnerId(userId);
-            var currentAnimal = animalService.GetAnimalIncludeOwner(id);
+            if (userId == null)
+            {
+                return BadRequest();
+            }
 
+            var ownerId = ownerService.GetOwnerId(userId);
+            if (ownerId == null)
+            {
+                return BadRequest();
+            }
+
+            var currentAnimal = animalService.GetAnimalIncludeOwner(id);
             if (currentAnimal == null)
             {
                 return BadRequest();
@@ -76,7 +87,7 @@ namespace VetRegister.Controllers
                 Name = currentAnimal.Name,
                 DateOfBirth = currentAnimal.DateOfBirth.ToString("d"),
                 SpecieId = currentAnimal.SpecieId,
-                Species = this.animalService.GetAnimalSpecies(),
+                Species = animalService.GetAnimalSpecies(),
             });
         }
 
@@ -84,9 +95,18 @@ namespace VetRegister.Controllers
         public IActionResult Edit(int id, AnimalFormModel modelAnimal)
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            //var ownerId = ownerService.GetOwnerId(userId);
-            var currentAnimal = animalService.GetAnimalIncludeOwner(id);
+            if (userId == null)
+            {
+                return BadRequest();
+            }
 
+            var ownerId = ownerService.GetOwnerId(userId);
+            if (ownerId == null)
+            {
+                return BadRequest();
+            }
+
+            var currentAnimal = animalService.GetAnimalIncludeOwner(id);
             if (currentAnimal == null)
             {
                 return BadRequest();
@@ -106,9 +126,18 @@ namespace VetRegister.Controllers
         public IActionResult Details(int id)
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            //var ownerId = ownerService.GetOwnerId(userId);
-            var currentAnimal = animalService.GetAnimalIncludeOwner(id);
+            if (userId == null)
+            {
+                return BadRequest();
+            }
 
+            var ownerId = ownerService.GetOwnerId(userId);
+            if (ownerId == null)
+            {
+                return BadRequest();
+            }
+
+            var currentAnimal = animalService.GetAnimalIncludeOwner(id);
             if (currentAnimal == null)
             {
                 return BadRequest();
@@ -134,10 +163,19 @@ namespace VetRegister.Controllers
 
         public IActionResult Delete(int id)
         {
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var ownerId = ownerService.GetOwnerId(userId);
-            var currentAnimal = animalService.GetAnimalIncludeOwner(id);
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return BadRequest();
+            }
 
+            var ownerId = ownerService.GetOwnerId(userId);
+            if (ownerId == null)
+            {
+                return BadRequest();
+            }
+
+            var currentAnimal = animalService.GetAnimalIncludeOwner(id);
             if (currentAnimal == null)
             {
                 return BadRequest();

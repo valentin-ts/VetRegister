@@ -10,12 +10,12 @@ namespace VetRegister.Core.Services
     public class AnimalService : IAnimalService
     {
         private readonly ApplicationDbContext data;
-        //private readonly IOwnerService ownerService;
+        private readonly IOwnerService ownerService;
 
-        public AnimalService(ApplicationDbContext data/* IOwnerService ownerService*/)
+        public AnimalService(ApplicationDbContext data, IOwnerService ownerService)
         {
             this.data = data;
-            //this.OwnerService = ownerService;
+            this.ownerService = ownerService;
         }
 
         public void Add(AnimalFormModel modelAnimal, string userId)
@@ -23,7 +23,7 @@ namespace VetRegister.Core.Services
             Animal newAnimal = new Animal
             {
                 Name = modelAnimal.Name,
-                Owner = data.Owners.FirstOrDefault(o => o.User.Id == userId), //??????
+                Owner = data.Owners.FirstOrDefault(o => o.User.Id == userId)!,
                 DateOfBirth = DateTime.Parse(modelAnimal.DateOfBirth),
                 SpecieId = modelAnimal.SpecieId
             };

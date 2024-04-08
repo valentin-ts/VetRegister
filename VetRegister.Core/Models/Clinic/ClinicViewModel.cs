@@ -11,6 +11,6 @@ namespace VetRegister.Core.Models.Clinic
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; } = String.Empty;
 
-        public IEnumerable<string> Doctors { get; set; } = new List<string>();
+        public IEnumerable<string> DoctorNames { get; set; } = new List<string>();
     }
 }

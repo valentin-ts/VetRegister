@@ -42,7 +42,6 @@ namespace VetRegister.Controllers
             return RedirectToAction("All");
         }
 
-
         public IActionResult Delete(int id)
         {
             if (!specieService.IdExists(id))
@@ -62,7 +61,7 @@ namespace VetRegister.Controllers
                 return BadRequest();
             }
 
-            var currentSpecie = specieService.FindById(id);
+            var currentSpecie = specieService.GetById(id);
             return View(new SpecieFormModel
             {
                 NewSpecieName = currentSpecie.Name
@@ -77,7 +76,14 @@ namespace VetRegister.Controllers
                 return View(modelSpecie);
             }
 
-            specieService.Edit(id, modelSpecie);
+            var currentSpecie = specieService.GetById(id);
+
+            if (currentSpecie == null)
+            {
+                return BadRequest();
+            }
+
+            specieService.Edit(currentSpecie, modelSpecie);
 
             return RedirectToAction("All");
         }

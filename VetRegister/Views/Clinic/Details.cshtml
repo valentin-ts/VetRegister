@@ -15,14 +15,14 @@
     </div>
     <br>
 
-    @if (Model.Doctors.Count() > 0)
+    @if (Model.DoctorNames.Count() > 0)
     {
         <div>
             <br>
             <label class="text-body">Cannot delete clinic "@Model.Name". The following doctors are working there:</label>
             <br>
             <ul class="list-group">
-                @foreach (var doctor in Model.Doctors)
+                @foreach (var doctor in Model.DoctorNames)
                 {
                     <li class="list-group-item">@doctor</li>
                 }

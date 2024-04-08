@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VetRegister.Core.Contracts;
 using VetRegister.Core.Models.Clinic;
+using VetRegister.Infrastructure.Data.Models;
 
 namespace VetRegister.Controllers
 {
@@ -20,21 +21,21 @@ namespace VetRegister.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(ClinicFormModel clinic)
+        public IActionResult Add(ClinicFormModel modelClinic)
         {
             ViewBag.ClinicNameExists = false;
-            if (clinicService.NameTaken(clinic.Name))
+            if (clinicService.NameTaken(modelClinic.Name))
             {
                 ViewBag.ClinicNameExists = true;
-                return View(clinic);
+                return View(modelClinic);
             }
 
             if (!ModelState.IsValid)
             {
-                return View(clinic);
+                return View(modelClinic);
             }
 
-            clinicService.Add(clinic);
+            clinicService.Add(modelClinic);
 
             return RedirectToAction("All");
         }
@@ -42,7 +43,6 @@ namespace VetRegister.Controllers
         public IActionResult Edit(int id)
         {
             var currentClinic = clinicService.GetById(id);
-
             if (currentClinic == null)
             {
                 return BadRequest();
@@ -60,7 +60,13 @@ namespace VetRegister.Controllers
         [HttpPost]
         public IActionResult Edit(int id, ClinicFormModel modelClinic)
         {
-            clinicService.Edit(id, modelClinic);
+            var currentClinic = clinicService.GetById(id);
+            if (currentClinic == null)
+            {
+                return BadRequest();
+            }
+
+            clinicService.Edit(currentClinic, modelClinic);
 
             return RedirectToAction(nameof(All));
         }
@@ -99,7 +105,7 @@ namespace VetRegister.Controllers
                 Id = currentClinic.Id,
                 Name = currentClinic.Name,
                 PhoneNumber = currentClinic.PhoneNumber,
-                Doctors = clinicService.GetDoctorsForClinic(id)
+                DoctorNames = clinicService.GetDoctorNamesForClinic(id)
                 //Doctors = currentClinic.Doctors.Select(x =>  x.Name).ToList()
             });;
         }

@@ -11,7 +11,7 @@ namespace VetRegister.Core.Contracts
 {
     public interface IOwnerService
     {
-        public int GetOwnerId(string userId);
+        public int? GetOwnerId(string? userId);
 
         public IEnumerable<OwnerViewModel> GetAllOwners();
 

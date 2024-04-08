@@ -16,6 +16,13 @@ namespace VetRegister.Core.Services
             this.data = data;
         }
 
+        public bool DoctorExists(int id)
+        {
+            return this.data
+                .Doctors
+                .Any(d => d.Id == id);
+        }
+
         public IEnumerable<DoctorViewModel> GetAllDoctors()
         {
             return this.data
@@ -33,7 +40,7 @@ namespace VetRegister.Core.Services
 
         public DoctorDetailsViewModel GetDoctorDetails(int id)
         {
-                var procedures = this.data
+            var procedures = this.data
                 .Procedures
                 .Where(p => p.Doctor.Id == id)
                 .Select(p => new ProcedureViewModel
@@ -49,14 +56,14 @@ namespace VetRegister.Core.Services
             return new DoctorDetailsViewModel
             {
                 Id = id,
-                Name = this.data.Doctors.FirstOrDefault(d => d.Id == id).Name,
-                ClinicName = this.data.Doctors.Include(d => d.Clinic).FirstOrDefault(d => d.Id == id).Clinic.Name,
+                Name = this.data.Doctors.Find(id)!.Name,
+                ClinicName = this.data.Doctors.Include(d => d.Clinic).FirstOrDefault(d => d.Id == id)!.Clinic.Name,
                 Procedures = procedures
             };
         }
 
 
-        public DoctorViewModel GetById(int id)
+        public DoctorViewModel? GetById(int id)
         {
             return this.data
                 .Doctors
@@ -72,11 +79,9 @@ namespace VetRegister.Core.Services
                 }).FirstOrDefault();
         }
 
-        public int GetDoctorId(string userId)
+        public int? GetDoctorId(string? userId)
         {
-            return this.data
-                .Doctors
-                .FirstOrDefault(d => d.UserId == userId).Id;
+            return this.data.Doctors.FirstOrDefault(d => d.UserId == userId)?.Id;
         }
 
         public void CreateDoctor(Doctor newDoctor)
@@ -84,5 +89,7 @@ namespace VetRegister.Core.Services
             this.data.Doctors.Add(newDoctor);
             this.data.SaveChanges();
         }
+
+
     }
 }

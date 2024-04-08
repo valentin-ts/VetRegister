@@ -13,12 +13,12 @@ namespace VetRegister.Core.Contracts
 
         public IEnumerable<SpecieViewModel> GetAll();
 
-        public void Add(string NewSpecieName);
+        public void Add(string newSpecieName);
 
         public void Delete(int id);
 
-        public void Edit(int id, SpecieFormModel modelSpecie);
+        public void Edit(Specie currentSpecie, SpecieFormModel modelSpecie);
 
-        public Specie FindById(int id);
+        public Specie GetById(int id);
     }
 }

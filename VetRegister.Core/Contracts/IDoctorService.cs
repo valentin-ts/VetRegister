@@ -11,9 +11,11 @@ namespace VetRegister.Core.Contracts
 {
     public interface IDoctorService
     {
-        public int GetDoctorId(string userId);
+        public bool DoctorExists(int id);
 
-        public DoctorViewModel GetById(int id);
+        public int? GetDoctorId(string? userId);
+
+        public DoctorViewModel? GetById(int id);
 
         public IEnumerable<DoctorViewModel> GetAllDoctors();
 

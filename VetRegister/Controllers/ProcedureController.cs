@@ -30,15 +30,23 @@ namespace VetRegister.Controllers
         public IActionResult Add(ProcedureFormModel modelProcedure, int animalId)
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return BadRequest();
+            }
+
+            var doctorId = doctorService.GetDoctorId(userId);
+            if (doctorId == null) 
+            {
+                return BadRequest();
+            }
 
             if (!ModelState.IsValid)
             {
                 return View(modelProcedure);
             }
 
-            var doctorId = doctorService.GetDoctorId(userId);
-
-            procedureService.Add(modelProcedure, animalId, doctorId);
+            procedureService.Add(modelProcedure, animalId, (int)doctorId); // casting to int as it is already checked that it is not null
 
             return RedirectToAction("All");
         }

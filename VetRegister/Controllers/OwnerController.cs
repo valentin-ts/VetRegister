@@ -33,7 +33,12 @@ namespace VetRegister.Controllers
         [HttpPost]
         public IActionResult Become(BecomeOwnerFormModel owner)
         {
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+            {
+                return BadRequest();
+            }
 
             if (!ModelState.IsValid)
             {

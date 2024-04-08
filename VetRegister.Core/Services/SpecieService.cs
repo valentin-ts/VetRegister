@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VetRegister.Core.Contracts;
+﻿using VetRegister.Core.Contracts;
 using VetRegister.Core.Models.Specie;
 using VetRegister.Infrastructure.Data;
 using VetRegister.Infrastructure.Data.Models;
@@ -37,7 +32,7 @@ namespace VetRegister.Core.Services
         {
             return this.data
                 .Species
-                .FirstOrDefault(b => b.Id == specieId).Name;
+                .Find(specieId)!.Name;
         }
 
         public IEnumerable<SpecieViewModel> GetAll()
@@ -52,11 +47,11 @@ namespace VetRegister.Core.Services
                 .ToList();
         }
 
-        public void Add(string specieName)
+        public void Add(string newSpecieName)
         {
             var newSpecie = new Specie
             {
-                Name = specieName
+                Name = newSpecieName
             };
 
             this.data.Species.Add(newSpecie);
@@ -65,21 +60,20 @@ namespace VetRegister.Core.Services
 
         public void Delete(int id)
         {
-            var currentSpecie = this.data.Species.Find(id);
+            Specie currentSpecie = this.data.Species.Find(id)!;
             this.data.Species.Remove(currentSpecie);
             this.data.SaveChanges();
         }
 
-        public void Edit(int id, SpecieFormModel modelSpecie)
+        public void Edit(Specie currentSpecie, SpecieFormModel modelSpecie)
         {
-            var currentSpecie = this.data.Species.Find(id);
             currentSpecie.Name = modelSpecie.NewSpecieName;
             this.data.SaveChanges();
         }
 
-        public Specie? FindById(int id)
+        public Specie GetById(int id)
         {
-            return this.data.Species.Find(id);
+            return this.data.Species.Find(id)!;
         }
     }
 }

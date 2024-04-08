@@ -27,6 +27,11 @@ namespace VetRegister.Controllers
 
         public IActionResult Details(int id) 
         {
+            if (!doctorService.DoctorExists(id))
+            {
+                return BadRequest();
+            }
+
             return View(doctorService.GetDoctorDetails(id));
         }
 
@@ -41,7 +46,12 @@ namespace VetRegister.Controllers
         [HttpPost]
         public IActionResult Become(BecomeDoctorFormModel doctor)
         {
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+            {
+                return BadRequest();
+            }
 
             if (!ModelState.IsValid)
             {

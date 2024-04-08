@@ -5,10 +5,6 @@ using VetRegister.Infrastructure.Data;
 using VetRegister.Infrastructure.Data.Models;
 
 
-using System.Collections.Generic;
-using System.Linq;
-
-
 
 namespace VetRegister.Core.Services
 {
@@ -19,6 +15,13 @@ namespace VetRegister.Core.Services
         public ClinicService(ApplicationDbContext data)
         {
             this.data = data;
+        }
+
+        public bool IdExists(int clinicId)
+        {
+            return this.data
+                .Clinics
+                .Any(b => b.Id == clinicId);
         }
 
         public void Add(ClinicFormModel clinic)
@@ -49,9 +52,8 @@ namespace VetRegister.Core.Services
             this.data.SaveChanges();
         }
 
-        public void Edit(int id, ClinicFormModel modelClinic)
+        public void Edit(Clinic currentClinic, ClinicFormModel modelClinic)
         {
-            var currentClinic = GetById(id);
             currentClinic.Name = modelClinic.Name;
             currentClinic.PhoneNumber = modelClinic.PhoneNumber;
 
@@ -71,12 +73,13 @@ namespace VetRegister.Core.Services
             .ToList();
         }
 
-        public Clinic GetById(int id)
+        public Clinic? GetById(int id)
         {
             return this.data.Clinics.Find(id);
+            //return this.data.Clinics.FirstOrDefault(c => c.Id == id);
         }
 
-        public Clinic GetByIdIncludeDoctors(int id)
+        public Clinic? GetByIdIncludeDoctors(int id)
         {
             return this.data
                 .Clinics
@@ -84,7 +87,7 @@ namespace VetRegister.Core.Services
                 .FirstOrDefault(c => c.Id == id);
         }
 
-        public IEnumerable<string> GetDoctorsForClinic(int clinicId)
+        public IEnumerable<string> GetDoctorNamesForClinic(int clinicId)
         {
             return this.data
                 .Doctors
@@ -92,5 +95,7 @@ namespace VetRegister.Core.Services
                 .Select(d => d.Name)
                 .ToList();
         }
+
+
     }
 }

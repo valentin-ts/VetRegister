@@ -5,15 +5,17 @@ namespace VetRegister.Core.Contracts
 {
     public interface IClinicService
     {
+        public bool IdExists(int id);
+
         public bool NameTaken(string name);
 
-        public void Add(ClinicFormModel clinic);
+        public void Add(ClinicFormModel modelClinic);
 
-        public Clinic GetById(int id);
+        public Clinic? GetById(int id);
 
-        public Clinic GetByIdIncludeDoctors(int id);
+        public Clinic? GetByIdIncludeDoctors(int id);
 
-        public void Edit(int id, ClinicFormModel modelClinic);
+        public void Edit(Clinic currentClinic, ClinicFormModel modelClinic);
 
         public bool HasAnyDoctors(int id);
 
@@ -21,6 +23,6 @@ namespace VetRegister.Core.Contracts
 
         public IEnumerable<ClinicViewModel> GetAllClinics();
 
-        public IEnumerable<string> GetDoctorsForClinic(int clinicId);
+        public IEnumerable<string> GetDoctorNamesForClinic(int id);
     }
 }
