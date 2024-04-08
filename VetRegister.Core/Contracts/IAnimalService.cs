@@ -7,22 +7,20 @@ namespace VetRegister.Core.Contracts
 {
     public interface IAnimalService
     {
-        public void Add(AnimalFormModel modelAnimal, string userId);
+        public Task AddAnimalAsync(AnimalFormModel modelAnimal, string userId);
 
-        public void Edit(Animal currentAnimal, AnimalFormModel modelAnimal);
+        public Task EditAnimalAsync(Animal currentAnimal, AnimalFormModel modelAnimal);
 
-        public IEnumerable<SpecieViewModel> GetAnimalSpecies();
+        public Task<IEnumerable<SpecieViewModel>> GetAnimalSpeciesAsync();
 
-        public Animal? GetAnimal(int id);
+        public Task<Animal?> GetAnimalAsync(int id);
 
-        public Animal? GetAnimalIncludeOwner(int id);
+        public Task<Animal?> GetAnimalIncludeOwnerAsync(int id);
 
-        public void Delete(Animal currentAnimal);
+        public Task DeleteAnimalAsync(Animal currentAnimal);
 
-        public IQueryable<Animal> GetAnimalsAsQueryable();
+        public Task<IEnumerable<ProcedureViewModel>> GetAnimalProceduresAsync(int animalId);
 
-        public IEnumerable<ProcedureViewModel> GetAnimalProcedures(int animalId);
-
-        public AllAnimalsQueryModel AllAnimals(string? nameFilter, int? specieFilter, string? dateOfBirthFilter, string? ageFilter); 
+        public Task<AllAnimalsQueryModel> GetAllAnimalsAsync(string? nameFilter, int? specieFilter, string? dateOfBirthFilter, string? ageFilter); 
     }
 }

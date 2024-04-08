@@ -4,10 +4,10 @@ namespace VetRegister.Core.Contracts
 {
     public interface IProcedureService
     {
-        public IEnumerable<ProcedureViewModel> GetAllProcedures();
+        public Task<IEnumerable<ProcedureViewModel>> GetAllProceduresAsync();
 
-        //public IEnumerable<ProcedureViewModel> GetDoctorProcedures(int doctorId);
+        //public Task<IEnumerable<ProcedureViewModel>> GetDoctorProceduresAsync(int doctorId);
 
-        public void Add(ProcedureFormModel modelProcedure, int animalId, int doctorId);
+        public Task AddProcedureAsync(ProcedureFormModel modelProcedure, int animalId, int doctorId);
     }
 }

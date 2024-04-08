@@ -16,9 +16,9 @@ namespace VetRegister.Core.Services
             this.data = data;
         }
 
-        public IEnumerable<OwnerViewModel> GetAllOwners()
+        public async Task<IEnumerable<OwnerViewModel>> GetAllOwnersAsync()
         {
-            return this.data
+            return await data
             .Owners
             .Include(o => o.User)
             .Include(o => o.Animals)
@@ -28,12 +28,13 @@ namespace VetRegister.Core.Services
                 Name = o.User.UserName,
                 AnimalsCount = o.Animals.Count()
             })
-            .ToList();
+            .AsNoTracking()
+            .ToListAsync();
         }
 
-        public OwnerViewModel GetOwnerDetails(int id)
+        public async Task<OwnerViewModel> GetOwnerDetailsAsync(int id)
         {
-            var animals = this.data
+            var animals = await data
             .Animals
             .Include(a => a.Specie)
             .Where(a => a.Owner.Id == id)
@@ -44,7 +45,8 @@ namespace VetRegister.Core.Services
                 DateOfBirth = a.DateOfBirth.ToString("d"),
                 SpecieName = a.Specie.Name
             })
-            .ToList();
+            .AsNoTracking()
+            .ToListAsync();
 
             return new OwnerViewModel
             {
@@ -54,15 +56,17 @@ namespace VetRegister.Core.Services
             };
         }
 
-        public int? GetOwnerId(string? userId)
+        public async Task<int?> GetOwnerIdAsync(string? userId)
         {
-            return this.data.Owners.FirstOrDefault(o => o.UserId == userId)?.Id;
+            return (await data
+                .Owners
+                .FirstOrDefaultAsync(o => o.UserId == userId))?.Id;
         }
 
-        public void CreateOwner(Owner newOwner)
+        public async Task CreateOwnerAsync(Owner newOwner)
         {
-            this.data.Owners.Add(newOwner);
-            this.data.SaveChanges();
+            await data.Owners.AddAsync(newOwner);
+            await data.SaveChangesAsync();
         }
     }
 }

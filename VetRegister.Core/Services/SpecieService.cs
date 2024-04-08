@@ -1,4 +1,5 @@
-﻿using VetRegister.Core.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using VetRegister.Core.Contracts;
 using VetRegister.Core.Models.Specie;
 using VetRegister.Infrastructure.Data;
 using VetRegister.Infrastructure.Data.Models;
@@ -14,66 +15,73 @@ namespace VetRegister.Core.Services
             this.data = data;
         }
 
-        public bool IdExists(int specieId)
+        public async Task<bool> SpecieIdExistsAsync(int specieId)
         {
-            return this.data
+            return await data
                 .Species
-                .Any(b => b.Id == specieId);
+                .AsNoTracking()
+                .AnyAsync(b => b.Id == specieId);
         }
 
-        public bool NameExists(string specieName)
+        public async Task<bool> SpecieNameExistsAsync(string specieName)
         {
-            return this.data
+            return await data
                 .Species
-                .Any(b => b.Name == specieName);
+                .AsNoTracking()
+                .AnyAsync(b => b.Name == specieName);
         }
 
-        public string GetName(int specieId)
+        public async Task<string> GetSpecieNameAsync(int specieId)
         {
-            return this.data
+            return (await data
                 .Species
-                .Find(specieId)!.Name;
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.Id ==specieId))!
+                .Name;
         }
 
-        public IEnumerable<SpecieViewModel> GetAll()
+        public async Task<IEnumerable<SpecieViewModel>> GetAllSpeciesAsync()
         {
-            return this.data
+            return  await data
                 .Species
                 .Select(a => new SpecieViewModel
                 {
                     Id = a.Id,
                     Name = a.Name
                 })
-                .ToList();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public void Add(string newSpecieName)
+        public async Task AddSpecieAsync(string newSpecieName)
         {
             var newSpecie = new Specie
             {
                 Name = newSpecieName
             };
 
-            this.data.Species.Add(newSpecie);
-            this.data.SaveChanges();
+            await data.Species.AddAsync(newSpecie);
+            await data.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task DeleteSpecieAsync(int id)
         {
-            Specie currentSpecie = this.data.Species.Find(id)!;
-            this.data.Species.Remove(currentSpecie);
-            this.data.SaveChanges();
+            Specie currentSpecie = (await data.Species.FirstOrDefaultAsync(s => s.Id == id))!;
+            data.Species.Remove(currentSpecie);
+            await data.SaveChangesAsync();
         }
 
-        public void Edit(Specie currentSpecie, SpecieFormModel modelSpecie)
+        public async Task EditSpecieAsync(Specie currentSpecie, SpecieFormModel modelSpecie)
         {
             currentSpecie.Name = modelSpecie.NewSpecieName;
-            this.data.SaveChanges();
+            await data.SaveChangesAsync();
         }
 
-        public Specie GetById(int id)
+        public async Task<Specie> GetSpecieByIdAsync(int id)
         {
-            return this.data.Species.Find(id)!;
+            return (await data
+                .Species
+                .FirstOrDefaultAsync(s => s.Id == id))!;
         }
     }
 }

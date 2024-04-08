@@ -17,12 +17,12 @@ namespace VetRegister.Controllers
 
         public IActionResult All()
         {
-            return View(ownerService.GetAllOwners());
+            return View(ownerService.GetAllOwnersAsync());
         }
 
         public IActionResult Details(int id)
         {
-            return View(ownerService.GetOwnerDetails(id));
+            return View(ownerService.GetOwnerDetailsAsync(id));
         }
 
         public IActionResult Become()
@@ -52,7 +52,7 @@ namespace VetRegister.Controllers
                 PhoneNumber = owner.PhoneNumber
             };
 
-            ownerService.CreateOwner(newOwner);
+            ownerService.CreateOwnerAsync(newOwner);
 
             return RedirectToAction("Index", "Home");
         }

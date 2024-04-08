@@ -5,20 +5,20 @@ namespace VetRegister.Core.Contracts
 {
     public interface ISpecieService
     {
-        public bool IdExists(int specieId);
+        public Task<bool> SpecieIdExistsAsync(int specieId);
 
-        public bool NameExists(string specieName);
+        public Task<bool> SpecieNameExistsAsync(string specieName);
 
-        public string GetName(int specieId);
+        public Task<string> GetSpecieNameAsync(int specieId);
 
-        public IEnumerable<SpecieViewModel> GetAll();
+        public Task<IEnumerable<SpecieViewModel>> GetAllSpeciesAsync();
 
-        public void Add(string newSpecieName);
+        public Task AddSpecieAsync(string newSpecieName);
 
-        public void Delete(int id);
+        public Task DeleteSpecieAsync(int id);
 
-        public void Edit(Specie currentSpecie, SpecieFormModel modelSpecie);
+        public Task EditSpecieAsync(Specie currentSpecie, SpecieFormModel modelSpecie);
 
-        public Specie GetById(int id);
+        public Task<Specie> GetSpecieByIdAsync(int id);
     }
 }

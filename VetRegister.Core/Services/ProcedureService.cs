@@ -1,4 +1,5 @@
-﻿using VetRegister.Core.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using VetRegister.Core.Contracts;
 using VetRegister.Core.Models.Procedure;
 using VetRegister.Infrastructure.Data;
 using VetRegister.Infrastructure.Data.Models;
@@ -14,9 +15,9 @@ namespace VetRegister.Core.Services
             this.data = data;
         }
 
-        public IEnumerable<ProcedureViewModel> GetAllProcedures()
+        public async Task<IEnumerable<ProcedureViewModel>> GetAllProceduresAsync()
         {
-            return this.data
+            return await data
                 .Procedures
                 .Select(p => new ProcedureViewModel
                 {
@@ -26,10 +27,11 @@ namespace VetRegister.Core.Services
                     CreatedOn = p.CreatedOn.ToString("d"),
                     DoctorName = p.Doctor.Name
                 })
-            .ToList();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public void Add(ProcedureFormModel modelProcedure, int animalId, int doctorId)
+        public async Task AddProcedureAsync(ProcedureFormModel modelProcedure, int animalId, int doctorId)
         {
             Procedure newProcedure = new Procedure
             {
@@ -39,8 +41,8 @@ namespace VetRegister.Core.Services
                 DoctorId = doctorId
             };
 
-            data.Procedures.Add(newProcedure);
-            data.SaveChanges();
+            await data.Procedures.AddAsync(newProcedure);
+            await data.SaveChangesAsync();
         }
     }
 }

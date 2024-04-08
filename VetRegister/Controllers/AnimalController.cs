@@ -22,16 +22,16 @@ namespace VetRegister.Controllers
             this.doctorService = doctorService;
         }
 
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
             return View(new AnimalFormModel
             {
-                Species = animalService.GetAnimalSpecies()
+                Species = await animalService.GetAnimalSpeciesAsync()
             });
         }
 
         [HttpPost]
-        public IActionResult Add(AnimalFormModel modelAnimal)
+        public async Task<IActionResult> Add(AnimalFormModel modelAnimal)
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -42,36 +42,36 @@ namespace VetRegister.Controllers
 
             if (!ModelState.IsValid)
             {
-                modelAnimal.Species = animalService.GetAnimalSpecies();
+                modelAnimal.Species = await animalService.GetAnimalSpeciesAsync();
                 return View(modelAnimal);
             }
 
-            if (!specieService.IdExists(modelAnimal.SpecieId))
+            if (await specieService.SpecieIdExistsAsync(modelAnimal.SpecieId) == false)
             {
                 return BadRequest();
             }
 
-            animalService.Add(modelAnimal, userId);
+            animalService.AddAnimalAsync(modelAnimal, userId);
 
             return RedirectToAction("All");
         }
 
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
             {
                 return BadRequest();
             }
 
-            var ownerId = ownerService.GetOwnerId(userId);
+            var ownerId = await ownerService.GetOwnerIdAsync(userId);
             if (ownerId == null)
             {
                 return BadRequest();
             }
 
-            var currentAnimal = animalService.GetAnimalIncludeOwner(id);
+            var currentAnimal = await animalService.GetAnimalIncludeOwnerAsync(id);
             if (currentAnimal == null)
             {
                 return BadRequest();
@@ -87,26 +87,26 @@ namespace VetRegister.Controllers
                 Name = currentAnimal.Name,
                 DateOfBirth = currentAnimal.DateOfBirth.ToString("d"),
                 SpecieId = currentAnimal.SpecieId,
-                Species = animalService.GetAnimalSpecies(),
+                Species = await animalService.GetAnimalSpeciesAsync(),
             });
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, AnimalFormModel modelAnimal)
+        public async Task<IActionResult> Edit(int id, AnimalFormModel modelAnimal)
         {
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
             {
                 return BadRequest();
             }
 
-            var ownerId = ownerService.GetOwnerId(userId);
+            var ownerId = ownerService.GetOwnerIdAsync(userId);
             if (ownerId == null)
             {
                 return BadRequest();
             }
 
-            var currentAnimal = animalService.GetAnimalIncludeOwner(id);
+            var currentAnimal = await animalService.GetAnimalIncludeOwnerAsync(id);
             if (currentAnimal == null)
             {
                 return BadRequest();
@@ -117,13 +117,13 @@ namespace VetRegister.Controllers
             //    return BadRequest();
             //}
 
-            animalService.Edit(currentAnimal, modelAnimal);
+            await animalService.EditAnimalAsync(currentAnimal, modelAnimal);
 
             return RedirectToAction("All");
         }
 
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
@@ -131,13 +131,9 @@ namespace VetRegister.Controllers
                 return BadRequest();
             }
 
-            var ownerId = ownerService.GetOwnerId(userId);
-            if (ownerId == null)
-            {
-                return BadRequest();
-            }
+            //Any doctor should be able to iew details, so he can add procedure, not just owner !!!
 
-            var currentAnimal = animalService.GetAnimalIncludeOwner(id);
+            var currentAnimal = await animalService.GetAnimalIncludeOwnerAsync(id);
             if (currentAnimal == null)
             {
                 return BadRequest();
@@ -155,27 +151,27 @@ namespace VetRegister.Controllers
                 DateOfBirth = currentAnimal.DateOfBirth.ToString("d"),
                 Age = (DateTime.UtcNow.Year - currentAnimal.DateOfBirth.Year).ToString(),
                 SpecieId = currentAnimal.SpecieId,
-                SpecieName = specieService.GetName(currentAnimal.SpecieId),
-                Procedures = animalService.GetAnimalProcedures(currentAnimal.Id)
+                SpecieName = await specieService.GetSpecieNameAsync(currentAnimal.SpecieId),
+                Procedures = await animalService.GetAnimalProceduresAsync(currentAnimal.Id)
             });
         }
 
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
             {
                 return BadRequest();
             }
 
-            var ownerId = ownerService.GetOwnerId(userId);
+            var ownerId = await ownerService.GetOwnerIdAsync(userId);
             if (ownerId == null)
             {
                 return BadRequest();
             }
 
-            var currentAnimal = animalService.GetAnimalIncludeOwner(id);
+            var currentAnimal = await animalService.GetAnimalIncludeOwnerAsync(id);
             if (currentAnimal == null)
             {
                 return BadRequest();
@@ -186,15 +182,15 @@ namespace VetRegister.Controllers
             //    return BadRequest();
             //}
 
-            animalService.Delete(currentAnimal);
+            await animalService.DeleteAnimalAsync(currentAnimal);
 
             return RedirectToAction("All");
         }
 
 
-        public IActionResult All(string? nameFilter, int? specieFilter, string? dateOfBirthFilter, string? ageFilter)
+        public async Task<IActionResult> All(string? nameFilter, int? specieFilter, string? dateOfBirthFilter, string? ageFilter)
         {
-            return View(animalService.AllAnimals(nameFilter, specieFilter, dateOfBirthFilter, ageFilter));
+            return View( await animalService.GetAllAnimalsAsync(nameFilter, specieFilter, dateOfBirthFilter, ageFilter));
         }
     }
 }

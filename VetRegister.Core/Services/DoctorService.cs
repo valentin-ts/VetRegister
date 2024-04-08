@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 using VetRegister.Core.Contracts;
 using VetRegister.Core.Models.Doctor;
 using VetRegister.Core.Models.Procedure;
@@ -16,16 +17,16 @@ namespace VetRegister.Core.Services
             this.data = data;
         }
 
-        public bool DoctorExists(int id)
+        public async Task<bool> DoctorExistsAsync(int id)
         {
-            return this.data
+            return await data
                 .Doctors
-                .Any(d => d.Id == id);
+                .AnyAsync(d => d.Id == id);
         }
 
-        public IEnumerable<DoctorViewModel> GetAllDoctors()
+        public async Task<IEnumerable<DoctorViewModel>> GetAllDoctorsAsync()
         {
-            return this.data
+            return await data
                 .Doctors
                 .Include(d => d.Clinic)
                 .Select(d => new DoctorViewModel
@@ -35,12 +36,13 @@ namespace VetRegister.Core.Services
                     ClinicName = d.Clinic.Name,
                     ProceduresCount = d.Procedures.Count()
                 })
-                .ToList();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public DoctorViewModel GetDoctorDetails(int id)
+        public async Task<DoctorViewModel> GetDoctorDetailsAsync(int id)
         {
-            var procedures = this.data
+            var procedures = await data
                 .Procedures
                 .Where(p => p.Doctor.Id == id)
                 .Select(p => new ProcedureViewModel
@@ -51,21 +53,38 @@ namespace VetRegister.Core.Services
                     CreatedOn = p.CreatedOn.ToString("d"),
                     //DoctorName = p.Doctor.Name
                 })
-            .ToList();
+                .AsNoTracking()
+                .ToListAsync();
+
+            var name = (await data
+                .Doctors
+                .AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == id))!
+                .Name;
+
+            var clinicName = (await data
+                .Doctors
+                .Include(d => d.Clinic)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == id))!
+                .Clinic
+                .Name;
+
+
 
             return new DoctorViewModel
             {
                 Id = id,
-                Name = this.data.Doctors.Find(id)!.Name,
-                ClinicName = this.data.Doctors.Include(d => d.Clinic).FirstOrDefault(d => d.Id == id)!.Clinic.Name,
+                Name = name,
+                ClinicName = clinicName,
                 Procedures = procedures
             };
         }
 
 
-        public DoctorViewModel? GetById(int id)
+        public async Task<DoctorViewModel?> GetDoctorByIdAsync(int id)
         {
-            return this.data
+            return await data
                 .Doctors
                 .Include(d => d.Procedures)
                 .Where(d => d.Id == id)
@@ -76,18 +95,21 @@ namespace VetRegister.Core.Services
                     ClinicName = d.Clinic.Name,
                     ProceduresCount = d.Procedures.Count(),
                     //Procedures = d.Procedures.Select( p => p.Description)
-                }).FirstOrDefault();
+                })
+                .FirstOrDefaultAsync();
         }
 
-        public int? GetDoctorId(string? userId)
+        public async Task<int?> GetDoctorIdAsync(string? userId)
         {
-            return this.data.Doctors.FirstOrDefault(d => d.UserId == userId)?.Id;
+            return (await data
+                .Doctors
+                .FirstOrDefaultAsync(d => d.UserId == userId))?.Id;
         }
 
-        public void CreateDoctor(Doctor newDoctor)
+        public async Task CreateDoctorAsync(Doctor newDoctor)
         {
-            this.data.Doctors.Add(newDoctor);
-            this.data.SaveChanges();
+            await data.Doctors.AddAsync(newDoctor);
+            await data.SaveChangesAsync();
         }
 
 

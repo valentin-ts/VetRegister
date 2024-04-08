@@ -21,28 +21,28 @@ namespace VetRegister.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(ClinicFormModel modelClinic)
+        public async Task<IActionResult> Add(ClinicFormModel modelClinic)
         {
             ViewBag.ClinicNameExists = false;
-            if (clinicService.NameTaken(modelClinic.Name))
+            if ((await clinicService.ClinicNameTakenAsync(modelClinic.Name)) == true)
             {
                 ViewBag.ClinicNameExists = true;
                 return View(modelClinic);
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
                 return View(modelClinic);
             }
 
-            clinicService.Add(modelClinic);
+            await clinicService.AddClinicAsync(modelClinic);
 
             return RedirectToAction("All");
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var currentClinic = clinicService.GetById(id);
+            var currentClinic = await clinicService.GetClinicByIdAsync(id);
             if (currentClinic == null)
             {
                 return BadRequest();
@@ -58,42 +58,42 @@ namespace VetRegister.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, ClinicFormModel modelClinic)
+        public async Task<IActionResult> Edit(int id, ClinicFormModel modelClinic)
         {
-            var currentClinic = clinicService.GetById(id);
+            var currentClinic = await clinicService.GetClinicByIdAsync(id);
             if (currentClinic == null)
             {
                 return BadRequest();
             }
 
-            clinicService.Edit(currentClinic, modelClinic);
+            await clinicService.EditClinicAsync(currentClinic, modelClinic);
 
             return RedirectToAction(nameof(All));
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var currentClinic = clinicService.GetById(id);
+            var currentClinic = await clinicService.GetClinicByIdAsync(id);
             
             if (currentClinic == null)
             {
                 return BadRequest();
             }
 
-            if (clinicService.HasAnyDoctors(currentClinic.Id))
+            if ((await clinicService.ClinicHasAnyDoctorsAsync(currentClinic.Id)) == true)
             {
                 return BadRequest();
             }
 
-            clinicService.Delete(currentClinic);
+            await clinicService.DeleteClinicAsync(currentClinic);
 
             return RedirectToAction("All");
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             //var currentClinic = clinicService.GetByIdIncludeDoctors(id);
-            var currentClinic = clinicService.GetById(id);
+            var currentClinic = await clinicService.GetClinicByIdAsync(id);
 
             if (currentClinic == null)
             {
@@ -105,14 +105,14 @@ namespace VetRegister.Controllers
                 Id = currentClinic.Id,
                 Name = currentClinic.Name,
                 PhoneNumber = currentClinic.PhoneNumber,
-                DoctorNames = clinicService.GetDoctorNamesForClinic(id)
+                DoctorNames = await clinicService.GetDoctorNamesForClinicAsync(id)
                 //Doctors = currentClinic.Doctors.Select(x =>  x.Name).ToList()
             });;
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
-            return View(clinicService.GetAllClinics());
+            return View(await clinicService.GetAllClinicsAsync());
         }
     }
 }

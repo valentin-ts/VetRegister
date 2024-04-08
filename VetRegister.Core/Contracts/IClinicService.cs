@@ -5,24 +5,24 @@ namespace VetRegister.Core.Contracts
 {
     public interface IClinicService
     {
-        public bool IdExists(int id);
+        public Task<bool> ClinicIdExistsAsync(int id);
 
-        public bool NameTaken(string name);
+        public Task<bool> ClinicNameTakenAsync(string name);
 
-        public void Add(ClinicFormModel modelClinic);
+        public Task AddClinicAsync(ClinicFormModel modelClinic);
 
-        public Clinic? GetById(int id);
+        public Task<Clinic?> GetClinicByIdAsync(int id);
 
-        public Clinic? GetByIdIncludeDoctors(int id);
+        public Task<Clinic?> GetClinicByIdIncludeDoctorsAsync(int id);
 
-        public void Edit(Clinic currentClinic, ClinicFormModel modelClinic);
+        public Task EditClinicAsync(Clinic currentClinic, ClinicFormModel modelClinic);
 
-        public bool HasAnyDoctors(int id);
+        public Task<bool> ClinicHasAnyDoctorsAsync(int id);
 
-        public void Delete(Clinic currentClinic);
+        public Task DeleteClinicAsync(Clinic currentClinic);
 
-        public IEnumerable<ClinicViewModel> GetAllClinics();
+        public Task<IEnumerable<ClinicViewModel>> GetAllClinicsAsync();
 
-        public IEnumerable<string> GetDoctorNamesForClinic(int id);
+        public Task<IEnumerable<string>> GetDoctorNamesForClinicAsync(int id);
     }
 }

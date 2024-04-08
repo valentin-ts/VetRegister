@@ -11,16 +11,16 @@ namespace VetRegister.Core.Contracts
 {
     public interface IDoctorService
     {
-        public bool DoctorExists(int id);
+        public Task<bool> DoctorExistsAsync(int id);
 
-        public int? GetDoctorId(string? userId);
+        public Task<int?> GetDoctorIdAsync(string? userId);
 
-        public DoctorViewModel? GetById(int id);
+        public Task<DoctorViewModel?> GetDoctorByIdAsync(int id);
 
-        public IEnumerable<DoctorViewModel> GetAllDoctors();
+        public Task<IEnumerable<DoctorViewModel>> GetAllDoctorsAsync();
 
-        public DoctorViewModel GetDoctorDetails(int id);
+        public Task<DoctorViewModel> GetDoctorDetailsAsync(int id);
 
-        public void CreateDoctor(Doctor newDoctor);
+        public Task CreateDoctorAsync(Doctor newDoctor);
     }
 }

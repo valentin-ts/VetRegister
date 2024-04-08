@@ -19,7 +19,7 @@ namespace VetRegister.Core.Services
             this.ownerService = ownerService;
         }
 
-        public void Add(AnimalFormModel modelAnimal, string userId)
+        public async Task AddAnimalAsync(AnimalFormModel modelAnimal, string userId)
         {
             Animal newAnimal = new Animal
             {
@@ -29,75 +29,73 @@ namespace VetRegister.Core.Services
                 SpecieId = modelAnimal.SpecieId
             };
 
-            data.Animals.Add(newAnimal);
-            data.SaveChanges();
+            await data.Animals.AddAsync(newAnimal);
+            await data.SaveChangesAsync();
         }
 
-        public IEnumerable<SpecieViewModel> GetAnimalSpecies()
+        public async Task<IEnumerable<SpecieViewModel>> GetAnimalSpeciesAsync()
         {
-            return this.data
+            return await data
                 .Species
                 .Select(a => new SpecieViewModel
                 {
                     Id = a.Id,
                     Name = a.Name
                 })
-                .ToList();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public void Edit(Animal currentAnimal, AnimalFormModel modelAnimal)
+        public async Task EditAnimalAsync(Animal currentAnimal, AnimalFormModel modelAnimal)
         {
             currentAnimal.Name = modelAnimal.Name;
             currentAnimal.DateOfBirth = DateTime.Parse(modelAnimal.DateOfBirth);
             currentAnimal.SpecieId = modelAnimal.SpecieId;
 
-            this.data.SaveChanges();
+            await data.SaveChangesAsync();
         }
 
-        public void Delete(Animal currentAnimal)
+        public async Task DeleteAnimalAsync(Animal currentAnimal)
         {
-            this.data.Animals.Remove(currentAnimal);
-            this.data.SaveChanges();
+            data.Animals.Remove(currentAnimal);
+            await data.SaveChangesAsync();
         }
 
-        public IQueryable<Animal> GetAnimalsAsQueryable()
-        {
-            return this.data.Animals.AsQueryable();
-        }
 
-        public Animal? GetAnimal(int id)
+        public async Task<Animal?> GetAnimalAsync(int id)
         {
-            return this.data
+            return await data
                 .Animals
-                .FirstOrDefault(a => a.Id == id);
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public Animal? GetAnimalIncludeOwner(int id)
+        public async Task<Animal?> GetAnimalIncludeOwnerAsync(int id)
         {
-            return this.data
+            return await data
                 .Animals
                 .Include(a => a.Owner)
-                .FirstOrDefault(a => a.Id == id);
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public IEnumerable<ProcedureViewModel> GetAnimalProcedures(int animalId)
+        public async Task<IEnumerable<ProcedureViewModel>> GetAnimalProceduresAsync(int animalId)
         {
-            return this.data
+            return await data
                 .Procedures
                 .Where(p => p.AnimalId == animalId)
-                    .Select(p => new ProcedureViewModel
-                    {
-                        AnimalName = p.Animal.Name,
-                        Description = p.Description,
-                        CreatedOn = p.CreatedOn.ToString("d"),
-                        DoctorName = p.Doctor.Name
-                    })
-                .ToList();
+                .Select(p => new ProcedureViewModel
+                {
+                    AnimalName = p.Animal.Name,
+                    Description = p.Description,
+                    CreatedOn = p.CreatedOn.ToString("d"),
+                    DoctorName = p.Doctor.Name
+                })
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public AllAnimalsQueryModel AllAnimals(string? nameFilter, int? specieFilter, string? dateOfBirthFilter, string? ageFilter)
+        public async Task<AllAnimalsQueryModel> GetAllAnimalsAsync(string? nameFilter, int? specieFilter, string? dateOfBirthFilter, string? ageFilter)
         {
-            var animalsQuery = GetAnimalsAsQueryable();
+            var animalsQuery = data.Animals.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(nameFilter))
             {
@@ -119,7 +117,7 @@ namespace VetRegister.Core.Services
                 animalsQuery = animalsQuery.Where(a => (DateTime.UtcNow.Year - a.DateOfBirth.Year) == parsedAge);
             }
 
-            var filteredAnimals = animalsQuery
+            var filteredAnimals = await animalsQuery
                 //.Where(a => a.OwnerId == ownerId)  // Owner filter should be put if we want to see only owners animals, not all
                 .Select(a => new AnimalViewModel
                 {
@@ -130,9 +128,9 @@ namespace VetRegister.Core.Services
                     SpecieId = a.SpecieId,
                     SpecieName = a.Specie.Name
                 })
-                .ToList();
+                .ToListAsync();
 
-            var animalSpecies = GetAnimalSpecies();
+            var animalSpecies = await GetAnimalSpeciesAsync();
 
             return (new AllAnimalsQueryModel
             {

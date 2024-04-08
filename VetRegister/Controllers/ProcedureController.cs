@@ -16,9 +16,9 @@ namespace VetRegister.Controllers
             this.doctorService = doctorService;
 
         }
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
-            return View(procedureService.GetAllProcedures());
+            return View(await procedureService.GetAllProceduresAsync());
         }
 
         public IActionResult Add()
@@ -27,7 +27,7 @@ namespace VetRegister.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(ProcedureFormModel modelProcedure, int animalId)
+        public async Task<IActionResult> Add(ProcedureFormModel modelProcedure, int animalId)
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
@@ -35,7 +35,7 @@ namespace VetRegister.Controllers
                 return BadRequest();
             }
 
-            var doctorId = doctorService.GetDoctorId(userId);
+            var doctorId = await doctorService.GetDoctorIdAsync(userId);
             if (doctorId == null) 
             {
                 return BadRequest();
@@ -46,7 +46,7 @@ namespace VetRegister.Controllers
                 return View(modelProcedure);
             }
 
-            procedureService.Add(modelProcedure, animalId, (int)doctorId); // casting to int as it is already checked that it is not null
+            await procedureService.AddProcedureAsync(modelProcedure, animalId, (int)doctorId); // casting to int as it is already checked that it is not null
 
             return RedirectToAction("All");
         }

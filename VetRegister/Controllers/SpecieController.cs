@@ -15,53 +15,53 @@ namespace VetRegister.Controllers
         }
 
 
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
             return View(new SpecieFormModel
             {
-                AllSpeciesList = specieService.GetAll()
+                AllSpeciesList = await specieService.GetAllSpeciesAsync()
             });
         }
 
         [HttpPost]
-        public IActionResult All(SpecieFormModel modelSpecie)
+        public async Task<IActionResult> All(SpecieFormModel modelSpecie)
         {
-            if (specieService.NameExists(modelSpecie.NewSpecieName))
+            if (await specieService.SpecieNameExistsAsync(modelSpecie.NewSpecieName))
             {
                 this.ModelState.AddModelError(nameof(Specie.Id), "Specie already exists.");
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
-                modelSpecie.AllSpeciesList = specieService.GetAll();
+                modelSpecie.AllSpeciesList = await specieService.GetAllSpeciesAsync();
                 return View(modelSpecie);
             }
 
-            specieService.Add(modelSpecie.NewSpecieName);
+            await specieService.AddSpecieAsync(modelSpecie.NewSpecieName);
 
             return RedirectToAction("All");
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (!specieService.IdExists(id))
+            if (await specieService.SpecieIdExistsAsync(id) == false)
             {
                 return BadRequest();
             }
 
-            specieService.Delete(id);
+            await specieService.DeleteSpecieAsync(id);
 
             return RedirectToAction("All");
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (!specieService.IdExists(id))
+            if (await specieService.SpecieIdExistsAsync(id) == false)
             {
                 return BadRequest();
             }
 
-            var currentSpecie = specieService.GetById(id);
+            var currentSpecie = await specieService.GetSpecieByIdAsync(id);
             return View(new SpecieFormModel
             {
                 NewSpecieName = currentSpecie.Name
@@ -69,21 +69,20 @@ namespace VetRegister.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, SpecieFormModel modelSpecie)
+        public async Task<IActionResult> Edit(int id, SpecieFormModel modelSpecie)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
                 return View(modelSpecie);
             }
 
-            var currentSpecie = specieService.GetById(id);
-
+            var currentSpecie = await specieService.GetSpecieByIdAsync(id);
             if (currentSpecie == null)
             {
                 return BadRequest();
             }
 
-            specieService.Edit(currentSpecie, modelSpecie);
+            await specieService.EditSpecieAsync(currentSpecie, modelSpecie);
 
             return RedirectToAction("All");
         }

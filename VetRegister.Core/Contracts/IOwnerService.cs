@@ -11,12 +11,12 @@ namespace VetRegister.Core.Contracts
 {
     public interface IOwnerService
     {
-        public int? GetOwnerId(string? userId);
+        public Task<int?> GetOwnerIdAsync(string? userId);
 
-        public IEnumerable<OwnerViewModel> GetAllOwners();
+        public Task<IEnumerable<OwnerViewModel>> GetAllOwnersAsync();
 
-        public OwnerViewModel GetOwnerDetails(int id);
+        public Task<OwnerViewModel> GetOwnerDetailsAsync(int id);
 
-        public void CreateOwner(Owner newOwner);
+        public Task CreateOwnerAsync(Owner newOwner);
     }
 }

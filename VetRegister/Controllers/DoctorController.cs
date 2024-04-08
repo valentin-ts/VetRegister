@@ -20,42 +20,42 @@ namespace VetRegister.Controllers
             this.clinicService = clinicService;
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
-            return View(doctorService.GetAllDoctors());
+            return View(await doctorService.GetAllDoctorsAsync());
         }
 
-        public IActionResult Details(int id) 
+        public async Task<IActionResult> Details(int id) 
         {
-            if (!doctorService.DoctorExists(id))
+            if (await doctorService.DoctorExistsAsync(id) == false)
             {
                 return BadRequest();
             }
 
-            return View(doctorService.GetDoctorDetails(id));
+            return View(await doctorService.GetDoctorDetailsAsync(id));
         }
 
-        public IActionResult Become()
+        public async Task<IActionResult> Become()
         {
             return View(new BecomeDoctorFormModel
             {
-                Clinics = clinicService.GetAllClinics()
+                Clinics = await clinicService.GetAllClinicsAsync()
             });
         }
 
         [HttpPost]
-        public IActionResult Become(BecomeDoctorFormModel doctor)
+        public async Task<IActionResult> Become(BecomeDoctorFormModel doctor)
         {
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (userId == null)
             {
                 return BadRequest();
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
-                doctor.Clinics = clinicService.GetAllClinics();
+                doctor.Clinics = await clinicService.GetAllClinicsAsync();
                 return View(doctor);
             }
 
@@ -66,7 +66,7 @@ namespace VetRegister.Controllers
                 ClinicId = doctor.ClinicId,
             };
 
-            doctorService.CreateDoctor(newDoctor);
+            await doctorService.CreateDoctorAsync(newDoctor);
 
             return RedirectToAction("Index", "Home");
         }

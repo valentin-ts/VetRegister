@@ -17,14 +17,14 @@ namespace VetRegister.Core.Services
             this.data = data;
         }
 
-        public bool IdExists(int clinicId)
+        public async Task<bool> ClinicIdExistsAsync(int clinicId)
         {
-            return this.data
+            return await data
                 .Clinics
-                .Any(b => b.Id == clinicId);
+                .AnyAsync(b => b.Id == clinicId);
         }
 
-        public void Add(ClinicFormModel clinic)
+        public async Task AddClinicAsync(ClinicFormModel clinic)
         {
             var newClinic = new Clinic
             {
@@ -32,37 +32,42 @@ namespace VetRegister.Core.Services
                 PhoneNumber = clinic.PhoneNumber
             };
 
-            data.Clinics.Add(newClinic);
-            data.SaveChanges();
+            await data.Clinics.AddAsync(newClinic);
+            await data.SaveChangesAsync();
         }
 
-        public bool HasAnyDoctors(int id)
+
+        public async Task<bool> ClinicHasAnyDoctorsAsync(int id)
         {
-            return this.data.Doctors.Any(d => d.ClinicId == id);
+            return await data
+                .Doctors
+                .AnyAsync(d => d.ClinicId == id);
         }
 
-        public bool NameTaken(string name)
+        public async Task<bool> ClinicNameTakenAsync(string name)
         {
-            return this.data.Clinics.Any(c => c.Name == name);
+            return await data
+                .Clinics
+                .AnyAsync(c => c.Name == name);
         }
 
-        public void Delete(Clinic currentClinic)
+        public async Task DeleteClinicAsync(Clinic currentClinic)
         {
-            this.data.Clinics.Remove(currentClinic);
-            this.data.SaveChanges();
+            data.Clinics.Remove(currentClinic);
+            await data.SaveChangesAsync();
         }
 
-        public void Edit(Clinic currentClinic, ClinicFormModel modelClinic)
+        public async Task EditClinicAsync(Clinic currentClinic, ClinicFormModel modelClinic)
         {
             currentClinic.Name = modelClinic.Name;
             currentClinic.PhoneNumber = modelClinic.PhoneNumber;
 
-            data.SaveChanges();
+            await data.SaveChangesAsync();
         }
 
-        public IEnumerable<ClinicViewModel> GetAllClinics()
+        public async Task<IEnumerable<ClinicViewModel>> GetAllClinicsAsync()
         {
-            return this.data
+            return await data
             .Clinics
             .Select(c => new ClinicViewModel
             {
@@ -70,30 +75,33 @@ namespace VetRegister.Core.Services
                 Name = c.Name,
                 PhoneNumber = c.PhoneNumber,
             })
-            .ToList();
+            .AsNoTracking()
+            .ToListAsync();
         }
 
-        public Clinic? GetById(int id)
+        public async Task<Clinic?> GetClinicByIdAsync(int id)
         {
-            return this.data.Clinics.Find(id);
-            //return this.data.Clinics.FirstOrDefault(c => c.Id == id);
+            return await data
+                .Clinics
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public Clinic? GetByIdIncludeDoctors(int id)
+        public async Task<Clinic?> GetClinicByIdIncludeDoctorsAsync(int id)
         {
-            return this.data
+            return await data
                 .Clinics
                 .Include(c => c.Doctors)
-                .FirstOrDefault(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public IEnumerable<string> GetDoctorNamesForClinic(int clinicId)
+        public async Task<IEnumerable<string>> GetDoctorNamesForClinicAsync(int clinicId)
         {
-            return this.data
+            return await data
                 .Doctors
                 .Where(d => d.ClinicId == clinicId)
                 .Select(d => d.Name)
-                .ToList();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
 
