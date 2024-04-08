@@ -38,7 +38,7 @@ namespace VetRegister.Core.Services
                 .ToList();
         }
 
-        public DoctorDetailsViewModel GetDoctorDetails(int id)
+        public DoctorViewModel GetDoctorDetails(int id)
         {
             var procedures = this.data
                 .Procedures
@@ -53,7 +53,7 @@ namespace VetRegister.Core.Services
                 })
             .ToList();
 
-            return new DoctorDetailsViewModel
+            return new DoctorViewModel
             {
                 Id = id,
                 Name = this.data.Doctors.Find(id)!.Name,

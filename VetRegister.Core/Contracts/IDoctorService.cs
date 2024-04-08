@@ -19,7 +19,7 @@ namespace VetRegister.Core.Contracts
 
         public IEnumerable<DoctorViewModel> GetAllDoctors();
 
-        public DoctorDetailsViewModel GetDoctorDetails(int id);
+        public DoctorViewModel GetDoctorDetails(int id);
 
         public void CreateDoctor(Doctor newDoctor);
     }

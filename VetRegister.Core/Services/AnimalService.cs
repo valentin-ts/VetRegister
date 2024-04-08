@@ -2,6 +2,7 @@
 using VetRegister.Core.Contracts;
 using VetRegister.Core.Models.Animal;
 using VetRegister.Core.Models.Procedure;
+using VetRegister.Core.Models.Specie;
 using VetRegister.Infrastructure.Data;
 using VetRegister.Infrastructure.Data.Models;
 
@@ -32,11 +33,11 @@ namespace VetRegister.Core.Services
             data.SaveChanges();
         }
 
-        public IEnumerable<AnimalSpecieViewModel> GetAnimalSpecies()
+        public IEnumerable<SpecieViewModel> GetAnimalSpecies()
         {
             return this.data
                 .Species
-                .Select(a => new AnimalSpecieViewModel
+                .Select(a => new SpecieViewModel
                 {
                     Id = a.Id,
                     Name = a.Name

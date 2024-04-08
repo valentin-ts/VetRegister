@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VetRegister.Core.Models.Animal;
+﻿using VetRegister.Core.Models.Animal;
 using VetRegister.Core.Models.Procedure;
+using VetRegister.Core.Models.Specie;
 using VetRegister.Infrastructure.Data.Models;
 
 namespace VetRegister.Core.Contracts
@@ -15,7 +11,7 @@ namespace VetRegister.Core.Contracts
 
         public void Edit(Animal currentAnimal, AnimalFormModel modelAnimal);
 
-        public IEnumerable<AnimalSpecieViewModel> GetAnimalSpecies();
+        public IEnumerable<SpecieViewModel> GetAnimalSpecies();
 
         public Animal? GetAnimal(int id);
 

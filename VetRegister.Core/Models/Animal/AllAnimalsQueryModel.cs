@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using VetRegister.Core.Models.Specie;
 
 namespace VetRegister.Core.Models.Animal
 {
@@ -17,7 +18,7 @@ namespace VetRegister.Core.Models.Animal
         [Display(Name = "Specie")]
         public string SpecieFilter { get; set; } = string.Empty;
 
-        public IEnumerable<AnimalSpecieViewModel> Species { get; set; } = new List<AnimalSpecieViewModel>();
+        public IEnumerable<SpecieViewModel> Species { get; set; } = new List<SpecieViewModel>();
         
         [Display(Name = "Date Of Birth")]
         public string DateOfBirthFilter { get; set; } = string.Empty;

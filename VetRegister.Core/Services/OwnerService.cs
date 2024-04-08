@@ -31,7 +31,7 @@ namespace VetRegister.Core.Services
             .ToList();
         }
 
-        public OwnerDetailsViewModel GetOwnerDetails(int id)
+        public OwnerViewModel GetOwnerDetails(int id)
         {
             var animals = this.data
             .Animals
@@ -46,7 +46,7 @@ namespace VetRegister.Core.Services
             })
             .ToList();
 
-            return new OwnerDetailsViewModel
+            return new OwnerViewModel
             {
                 Id = id,
                 Name = "test",

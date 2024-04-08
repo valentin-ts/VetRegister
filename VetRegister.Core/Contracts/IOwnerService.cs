@@ -15,7 +15,7 @@ namespace VetRegister.Core.Contracts
 
         public IEnumerable<OwnerViewModel> GetAllOwners();
 
-        public OwnerDetailsViewModel GetOwnerDetails(int id);
+        public OwnerViewModel GetOwnerDetails(int id);
 
         public void CreateOwner(Owner newOwner);
     }

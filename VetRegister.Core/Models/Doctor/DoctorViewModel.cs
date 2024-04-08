@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using VetRegister.Core.Models.Procedure;
 
 namespace VetRegister.Core.Models.Doctor
 {
@@ -12,5 +13,7 @@ namespace VetRegister.Core.Models.Doctor
         public string ClinicName { get; set; } = string.Empty;
 
         public int ProceduresCount { get; set; }
-     }
+
+        public IEnumerable<ProcedureViewModel> Procedures = new List<ProcedureViewModel>();
+    }
 }

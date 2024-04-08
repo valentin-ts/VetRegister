@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using VetRegister.Core.Models.Specie;
 using static VetRegister.Infrastructure.Constants.DataConstants;
 using static VetRegister.Infrastructure.Constants.MessageConstants;
 
@@ -18,6 +19,6 @@ namespace VetRegister.Core.Models.Animal
         [Required]
         public int SpecieId { get; set; }
 
-        public IEnumerable<AnimalSpecieViewModel> Species { get; set; } = new List<AnimalSpecieViewModel>();
+        public IEnumerable<SpecieViewModel> Species { get; set; } = new List<SpecieViewModel>();
     }
 }
