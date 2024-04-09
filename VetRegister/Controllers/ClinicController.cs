@@ -42,16 +42,17 @@ namespace VetRegister.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var currentClinic = await clinicService.GetClinicByIdAsync(id);
-            if (currentClinic == null)
+            if (await clinicService.ClinicIdExistsAsync(id) == false)
             {
                 return BadRequest();
             }
 
+            var currentClinic = await clinicService.GetClinicByIdAsync(id);
+
             var modelClinic = new ClinicFormModel
             {
-                Name = currentClinic.Name,
-                PhoneNumber = currentClinic.PhoneNumber
+                Name = currentClinic!.Name,
+                PhoneNumber = currentClinic!.PhoneNumber
             };
 
             return View(modelClinic);
@@ -60,32 +61,30 @@ namespace VetRegister.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(int id, ClinicFormModel modelClinic)
         {
-            var currentClinic = await clinicService.GetClinicByIdAsync(id);
-            if (currentClinic == null)
+            
+            if (await clinicService.ClinicIdExistsAsync(id) == false)
             {
                 return BadRequest();
             }
 
-            await clinicService.EditClinicAsync(currentClinic, modelClinic);
+            await clinicService.EditClinicAsync(id, modelClinic);
 
             return RedirectToAction(nameof(All));
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var currentClinic = await clinicService.GetClinicByIdAsync(id);
-            
-            if (currentClinic == null)
+            if (await clinicService.ClinicIdExistsAsync(id) == false)
             {
                 return BadRequest();
             }
 
-            if ((await clinicService.ClinicHasAnyDoctorsAsync(currentClinic.Id)) == true)
+           if (await clinicService.ClinicHasAnyDoctorsAsync(id) == true)
             {
-                return BadRequest();
+                return BadRequest(); //clinic has doctors
             }
 
-            await clinicService.DeleteClinicAsync(currentClinic);
+            await clinicService.DeleteClinicAsync(id);
 
             return RedirectToAction("All");
         }

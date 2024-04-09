@@ -15,11 +15,11 @@ namespace VetRegister.Core.Contracts
 
         public Task<Clinic?> GetClinicByIdIncludeDoctorsAsync(int id);
 
-        public Task EditClinicAsync(Clinic currentClinic, ClinicFormModel modelClinic);
+        public Task EditClinicAsync(int id, ClinicFormModel modelClinic);
 
         public Task<bool> ClinicHasAnyDoctorsAsync(int id);
 
-        public Task DeleteClinicAsync(Clinic currentClinic);
+        public Task DeleteClinicAsync(int id);
 
         public Task<IEnumerable<ClinicViewModel>> GetAllClinicsAsync();
 

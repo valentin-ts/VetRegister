@@ -26,7 +26,7 @@ namespace VetRegister.Controllers
         {
             return View(new AnimalFormModel
             {
-                Species = await animalService.GetAnimalSpeciesAsync()
+                Species = await specieService.GetAllSpeciesAsync()
             });
         }
 
@@ -42,7 +42,7 @@ namespace VetRegister.Controllers
 
             if (!ModelState.IsValid)
             {
-                modelAnimal.Species = await animalService.GetAnimalSpeciesAsync();
+                modelAnimal.Species = await specieService.GetAllSpeciesAsync();
                 return View(modelAnimal);
             }
 
@@ -51,7 +51,7 @@ namespace VetRegister.Controllers
                 return BadRequest();
             }
 
-            animalService.AddAnimalAsync(modelAnimal, userId);
+            await animalService.AddAnimalAsync(modelAnimal, userId);
 
             return RedirectToAction("All");
         }
@@ -87,13 +87,19 @@ namespace VetRegister.Controllers
                 Name = currentAnimal.Name,
                 DateOfBirth = currentAnimal.DateOfBirth.ToString("d"),
                 SpecieId = currentAnimal.SpecieId,
-                Species = await animalService.GetAnimalSpeciesAsync(),
+                Species = await specieService.GetAllSpeciesAsync(),
             });
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(int id, AnimalFormModel modelAnimal)
         {
+
+            if (await animalService.AnimalIdExistsAsync(id) == false)
+            {
+                return BadRequest();
+            }
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
             {
@@ -106,18 +112,12 @@ namespace VetRegister.Controllers
                 return BadRequest();
             }
 
-            var currentAnimal = await animalService.GetAnimalIncludeOwnerAsync(id);
-            if (currentAnimal == null)
-            {
-                return BadRequest();
-            }
-
             //if (currentAnimal.Owner.Id != ownerId)
             //{
             //    return BadRequest();
             //}
 
-            await animalService.EditAnimalAsync(currentAnimal, modelAnimal);
+            await animalService.EditAnimalAsync(id, modelAnimal);
 
             return RedirectToAction("All");
         }
@@ -131,28 +131,29 @@ namespace VetRegister.Controllers
                 return BadRequest();
             }
 
-            //Any doctor should be able to iew details, so he can add procedure, not just owner !!!
-
-            var currentAnimal = await animalService.GetAnimalIncludeOwnerAsync(id);
-            if (currentAnimal == null)
+            //Any doctor should be able to view details, so he can add procedure, not just owner !!!
+            
+            if (await animalService.AnimalIdExistsAsync(id) == false)
             {
                 return BadRequest();
             }
 
-            //if (currentAnimal.Owner.Id != ownerId)
+            //if (currentAnimal.Owner.Id != ownerId) //do not forget include owner
             //{
             //    return BadRequest();
             //}
 
+            var currentAnimal = await animalService.GetAnimalAsync(id);
+
             return View(new AnimalViewModel
             {
-                Id = currentAnimal.Id,
-                Name = currentAnimal.Name,
-                DateOfBirth = currentAnimal.DateOfBirth.ToString("d"),
-                Age = (DateTime.UtcNow.Year - currentAnimal.DateOfBirth.Year).ToString(),
-                SpecieId = currentAnimal.SpecieId,
-                SpecieName = await specieService.GetSpecieNameAsync(currentAnimal.SpecieId),
-                Procedures = await animalService.GetAnimalProceduresAsync(currentAnimal.Id)
+                Id = currentAnimal!.Id,
+                Name = currentAnimal!.Name,
+                DateOfBirth = currentAnimal!.DateOfBirth.ToString("d"),
+                Age = (DateTime.UtcNow.Year - currentAnimal!.DateOfBirth.Year).ToString(),
+                SpecieId = currentAnimal!.SpecieId,
+                SpecieName = await specieService.GetSpecieNameAsync(currentAnimal!.SpecieId),
+                Procedures = await animalService.GetAnimalProceduresAsync(currentAnimal!.Id)
             });
         }
 
@@ -171,8 +172,7 @@ namespace VetRegister.Controllers
                 return BadRequest();
             }
 
-            var currentAnimal = await animalService.GetAnimalIncludeOwnerAsync(id);
-            if (currentAnimal == null)
+            if (await animalService.AnimalIdExistsAsync(id) == false)
             {
                 return BadRequest();
             }
@@ -182,7 +182,7 @@ namespace VetRegister.Controllers
             //    return BadRequest();
             //}
 
-            await animalService.DeleteAnimalAsync(currentAnimal);
+            await animalService.DeleteAnimalAsync(id);
 
             return RedirectToAction("All");
         }

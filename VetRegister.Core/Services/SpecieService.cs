@@ -42,7 +42,7 @@ namespace VetRegister.Core.Services
 
         public async Task<IEnumerable<SpecieViewModel>> GetAllSpeciesAsync()
         {
-            return  await data
+            return await data
                 .Species
                 .Select(a => new SpecieViewModel
                 {

@@ -11,12 +11,22 @@ namespace VetRegister.Core.Services
     public class AnimalService : IAnimalService
     {
         private readonly ApplicationDbContext data;
+        private readonly ISpecieService specieService;
         private readonly IOwnerService ownerService;
 
-        public AnimalService(ApplicationDbContext data, IOwnerService ownerService)
+        public AnimalService(ApplicationDbContext data, ISpecieService specieService, IOwnerService ownerService)
         {
             this.data = data;
+            this.specieService = specieService;
             this.ownerService = ownerService;
+        }
+
+
+        public async Task<bool> AnimalIdExistsAsync(int id)
+        {
+            return await data
+                .Animals
+                .AnyAsync(a => a.Id == id);
         }
 
         public async Task AddAnimalAsync(AnimalFormModel modelAnimal, string userId)
@@ -33,31 +43,20 @@ namespace VetRegister.Core.Services
             await data.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<SpecieViewModel>> GetAnimalSpeciesAsync()
+        public async Task EditAnimalAsync(int id, AnimalFormModel modelAnimal)
         {
-            return await data
-                .Species
-                .Select(a => new SpecieViewModel
-                {
-                    Id = a.Id,
-                    Name = a.Name
-                })
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        public async Task EditAnimalAsync(Animal currentAnimal, AnimalFormModel modelAnimal)
-        {
-            currentAnimal.Name = modelAnimal.Name;
-            currentAnimal.DateOfBirth = DateTime.Parse(modelAnimal.DateOfBirth);
-            currentAnimal.SpecieId = modelAnimal.SpecieId;
+            var currentAnimal = await GetAnimalAsync(id);
+            currentAnimal!.Name = modelAnimal.Name;
+            currentAnimal!.DateOfBirth = DateTime.Parse(modelAnimal.DateOfBirth);
+            currentAnimal!.SpecieId = modelAnimal.SpecieId;
 
             await data.SaveChangesAsync();
         }
 
-        public async Task DeleteAnimalAsync(Animal currentAnimal)
+        public async Task DeleteAnimalAsync(int id)
         {
-            data.Animals.Remove(currentAnimal);
+            var currentAnimal = await GetAnimalAsync(id);
+            data.Animals.Remove(currentAnimal!);
             await data.SaveChangesAsync();
         }
 
@@ -130,7 +129,7 @@ namespace VetRegister.Core.Services
                 })
                 .ToListAsync();
 
-            var animalSpecies = await GetAnimalSpeciesAsync();
+            var animalSpecies = await specieService.GetAllSpeciesAsync();
 
             return (new AllAnimalsQueryModel
             {

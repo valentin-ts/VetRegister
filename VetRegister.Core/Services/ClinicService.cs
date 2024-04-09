@@ -21,7 +21,7 @@ namespace VetRegister.Core.Services
         {
             return await data
                 .Clinics
-                .AnyAsync(b => b.Id == clinicId);
+                .AnyAsync(c => c.Id == clinicId);
         }
 
         public async Task AddClinicAsync(ClinicFormModel clinic)
@@ -51,17 +51,19 @@ namespace VetRegister.Core.Services
                 .AnyAsync(c => c.Name == name);
         }
 
-        public async Task DeleteClinicAsync(Clinic currentClinic)
+        public async Task DeleteClinicAsync(int id)
         {
-            data.Clinics.Remove(currentClinic);
+            var currentClinic = await GetClinicByIdAsync(id);
+            data.Clinics.Remove(currentClinic!);
             await data.SaveChangesAsync();
         }
 
-        public async Task EditClinicAsync(Clinic currentClinic, ClinicFormModel modelClinic)
+        public async Task EditClinicAsync(int id, ClinicFormModel modelClinic)
         {
-            currentClinic.Name = modelClinic.Name;
-            currentClinic.PhoneNumber = modelClinic.PhoneNumber;
+            var currentClinic = await GetClinicByIdAsync(id);
 
+            currentClinic!.Name = modelClinic.Name;
+            currentClinic!.PhoneNumber = modelClinic.PhoneNumber;
             await data.SaveChangesAsync();
         }
 
@@ -103,7 +105,5 @@ namespace VetRegister.Core.Services
                 .AsNoTracking()
                 .ToListAsync();
         }
-
-
     }
 }
